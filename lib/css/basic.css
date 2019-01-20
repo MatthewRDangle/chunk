@@ -28,100 +28,138 @@ body {
 	line-height: 1.25em;
 	font-family: sans-serif;
 }
-h1 {
-	/* Display */
-	display: block;	
 
+.header,
+h1, h2, h3, h4, h5, h6 {
+	/* Display */
+	display: block;		
+	
+	/* Content */
+	font-family: inherit;
+}
+
+h1, h1.header {
 	/* Size */
 	margin: 1em 0em 0.25em 0em;
 	
 	/* Content */
 	font-size: 3.75em;
 	line-height: 0.95em;	
-	font-family: sans-serif;
 }
-h2 {
-	/* Display */
-	display: block;
-	
+h2, h2.header {
 	/* Size */
 	margin: 1em 0em 0.25em 0em;
 	
 	/* Content */
 	font-size: 3em;
 	line-height: 0.95em;		
-	font-family: sans-serif;
 }
-h3 {
-	/* Display */
-	display: block;
-	
+h3, h3.header {
 	/* Size */
 	margin: 1em 0em 0.25em 0em;
 		
 	/* Content */
 	font-size: 2.5em;
 	line-height: 0.95em;	
-	font-family: sans-serif;
 }
-h4 {
-	/* Display */
-	display: block;
-	
+h4, h4.header {
 	/* Size */
 	margin: 1em 0em 0.25em 0em;
 		
 	/* Content */
 	font-size: 2em;
 	line-height: 0.95em;	
-	font-family: sans-serif;
 }
-h5 {
-	/* Display */
-	display: block;
-	
+h5, h5.header {
 	/* Size */
 	margin: 1em 0em 0.25em 0em;
 		
 	/* Content */
 	font-size: 1.5em;	
 	line-height: 0.95em;	
-	font-family: sans-serif;
 }
-h6 {
-	/* Display */
-	display: block;
-	
+h6, h6.header {
 	/* Size */
 	margin: 1em 0em 0.25em 0em;
 	
 	/* Content */
 	font-size: 1em;
 	line-height: 0.95em;	
-	font-family: sans-serif;
 }
-h1 + hr, 
-h2 + hr, 
-h3 + hr, 
-h4 + hr, 
-h5 + hr, 
-h6 + hr {
-	/* Size */
-	margin-top: 1em;
-}
-hr {
+
+.subheader {
 	/* Display */
 	display: block;
 	
 	/* Size */
-	margin: 2em 0;
+	margin: 1em 0 1.25em 0;
+	
+	/* Aesthetic */
+	font-size: inherit;
 }
+h1 + .subheader {
+	/* Size */
+	margin: .5em 0 2em 0;
+}
+h2 + .subheader {
+	/* Size */
+	margin: .5em 0 2em 0;
+}
+h3 + .subheader {
+	/* Size */
+	margin: .5em 0 2em 0;
+}
+h4 + .subheader {
+	/* Size */
+	margin: .5em 0 2em 0;
+}
+h5 + .subheader {
+	/* Size */
+	margin: .5em 0 2em 0;
+}
+h6 + .subheader {
+	/* Size */
+	margin: .5em 0 2em 0;
+}
+
+hr {
+	/* Size */
+	display: block;
+	
+	/* Size */
+	margin: 1.25em 0;
+}
+h1 + hr {
+	/* Size */
+	margin: .5em 0 1.25em 0;
+}
+h2 + hr {
+	/* Size */
+	margin: .5em 0 1.25em 0;
+}
+h3 + hr {
+	/* Size */
+	margin: .5em 0 1.25em 0;
+}
+h4 + hr {
+	/* Size */
+	margin: .5em 0 1.25em 0;
+}
+h5 + hr {
+	/* Size */
+	margin: .5em 0 1.25em 0;
+}
+h6 + hr {
+	/* Size */
+	margin: .5em 0 1.25em 0;
+}
+
 p {
 	/* Display */
 	display: block;
 	
 	/* Size */
-    margin: 1em 0;
+    margin: 1.25em 0;
 }
 span {
 	/* Display */
