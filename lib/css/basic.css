@@ -1,6 +1,5 @@
 /*
-** Style Semantics
-------------------
+** CSS Comment Information.
 ------------------
 ** Selector Groups: How the CSS selectors are organized for better readability.
 *** [Tag Names]: Where tag names are modified: may contain a class equivalent of the tag name.
@@ -21,9 +20,11 @@
 ** Font Properties
 ** Description: Controls how the text will scale. Using only (em's) ensures the font size only needs to be entered once.
 */
+
+/* [Tag Names] */
 body {
 	/* Content */
-	font-size: 12px;
+	font-size: 14px;
 	line-height: 1em;
 	font-family: sans-serif;
 }
@@ -39,17 +40,6 @@ h1 {
 	line-height: 0.95em;	
 	font-family: sans-serif;
 }
-h1 + .subtitle {
-	/* Display */
-	display: block;
-	
-	/* Size */
-	margin: 0.25em 0;
-	    
-	/* Content */
-    font-size: 1.75em;
-    line-height: 1.1em;
-}
 h2 {
 	/* Display */
 	display: block;
@@ -61,17 +51,6 @@ h2 {
 	font-size: 3em;
 	line-height: 0.95em;		
 	font-family: sans-serif;
-}
-h2 + .subtitle {
-	/* Display */
-	display: block;
-	
-	/* Size */
-	margin: 0.25em 0;
-	    
-	/* Content */
-	font-size: 1.5em;
-    line-height: 1.1em;
 }
 h3 {
 	/* Display */
@@ -85,17 +64,6 @@ h3 {
 	line-height: 0.95em;	
 	font-family: sans-serif;
 }
-h3 + .subtitle {
-	/* Display */
-	display: block;
-	
-	/* Size */
-	margin: 0.25em 0;
-	    
-	/* Content */
-	font-size: 1.25em;	
-    line-height: 1em;
-}
 h4 {
 	/* Display */
 	display: block;
@@ -107,17 +75,6 @@ h4 {
 	font-size: 2em;
 	line-height: 0.95em;	
 	font-family: sans-serif;
-}
-h4 + .subtitle {
-	/* Display */
-	display: block;
-	
-	/* Size */
-	margin: 0.25em 0;
-	    
-	/* Content */
-	font-size: 1em;	
-    line-height: 0.95em;
 }
 h5 {
 	/* Display */
@@ -131,17 +88,6 @@ h5 {
 	line-height: 0.95em;	
 	font-family: sans-serif;
 }
-h5 + .subtitle {
-	/* Display */
-	display: block;
-	
-	/* Size */
-	margin: 0.25em 0;
-	    
-	/* Content */
-	font-size: 1em;	
-	line-height: 0.95em;	
-}
 h6 {
 	/* Display */
 	display: block;
@@ -154,29 +100,12 @@ h6 {
 	line-height: 0.95em;	
 	font-family: sans-serif;
 }
-h6 + .subtitle {
-	/* Display */
-	display: block;
-	
-	/* Size */
-	margin: 0.25em 0;
-	    
-	/* Content */
-	font-size: 1em;	
-	line-height: 0.95em;	
-}
 h1 + hr, 
 h2 + hr, 
 h3 + hr, 
 h4 + hr, 
 h5 + hr, 
-h6 + hr, 
-h1 + .subtitle + hr, 
-h2 + .subtitle + hr, 
-h3 + .subtitle + hr, 
-h4 + .subtitle + hr, 
-h5 + .subtitle + hr, 
-h6 + .subtitle + hr {
+h6 + hr {
 	/* Size */
 	margin-top: 1em;
 }
