@@ -25,7 +25,7 @@
 body {
 	/* Content */
 	font-size: 14px;
-	line-height: 1em;
+	line-height: 1.25em;
 	font-family: sans-serif;
 }
 h1 {
@@ -142,7 +142,7 @@ strong {
 */
 
 /* [Tag Names] */
-a, .hyperlink {
+a {
 	/* Display */
 	display: inline;
 	
@@ -150,7 +150,7 @@ a, .hyperlink {
 	cursor: pointer;
 	color: #437DFF;
 }
-a:hover, .hyperlink:hover {
+a:hover {
 	/* Aesthetic */
 	color: #437DFF;
 }
