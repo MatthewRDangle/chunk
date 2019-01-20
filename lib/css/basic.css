@@ -319,16 +319,10 @@ input, select, textarea {
 	border-style: solid;
 	border-color: #000000;
 }
-input[type="text"] {}
-input[type="password"] {}
 input[type="radio"], input[type="checkbox"] {
 	/* Display */
 	display: inline-block;
 }
-input[type="color"] {}
-input[type="date"] {}
-input[type="email"] {}
-input[type="file"] {}
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   /* Insert Placeholder CSS Information Here. */
 }
@@ -344,5 +338,20 @@ input[type="file"] {}
 
 input[type="submit"], input[type="reset"],
 button {
+	/* Size */
+	padding: 2px 5px;
+	margin: 0 0;
+	border: 1px;
 	
+	/* Aesthetic */
+	color: #FFFFFF;
+	background-color: #000000;
+	border-style: solid;
+	border-color: #000000;
+}
+input[type="submit"]:hover, input[type="reset"]:hover,
+button:hover {
+	/* Aesthetic */
+	color: #000000;
+	background-color: #FFFFFF;
 }
