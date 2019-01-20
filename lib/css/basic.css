@@ -16,19 +16,33 @@
 ------------------
 */
 
+/*
+** Title: Theme Properties.
+** Description: Adjuce global proeprties.
+*/
+
+/* [Tag Names] */
+html, body {
+	/* Size */
+	padding: 0 5%;
+	margin: 0 0;
+	
+	/* Content */
+	font-family: sans-serif;
+	font-size: 14px;
+	line-height: 1.25em;
+	
+	/* Aesthetic */
+	color: #000000;
+	background-color: #FFFFFF;
+}
+
 /* 
 ** Font Properties
 ** Description: Controls how the text will scale. Using only (em's) ensures the font size only needs to be entered once.
 */
 
 /* [Tag Names] */
-body {
-	/* Content */
-	font-size: 14px;
-	line-height: 1.25em;
-	font-family: sans-serif;
-}
-
 .header,
 h1, h2, h3, h4, h5, h6 {
 	/* Display */
@@ -175,8 +189,8 @@ strong {
 }
 
 /* 
-** Hyperlink
-** Description: Changes the display of inline hyperlinks.
+** Anchors
+** Description: Changes the display of anchore tags.
 */
 
 /* [Tag Names] */
