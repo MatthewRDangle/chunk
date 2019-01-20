@@ -142,7 +142,7 @@ strong {
 */
 
 /* [Tag Names] */
-a {
+a, .anchor {
 	/* Display */
 	display: inline;
 	
@@ -150,13 +150,13 @@ a {
 	cursor: pointer;
 	color: #437DFF;
 }
-a:hover {
+a:hover, .anchor:hover {
 	/* Aesthetic */
 	color: #437DFF;
 }
 
 /* 
-** Inline Highlight 
+** User selection. 
 ** Description: Modifies the highlight color of the website.
 ** Note: .inlineHighlight is to be used with inline elements only.
 ** Note: Compatibility for IE9 and higher.
@@ -173,7 +173,7 @@ a:hover {
 	color: #FFFFFF; 
 	background-color: #437DFF; 
 }
-.inlineHighlight {
+.selection {
 	/* Aesthetic */
 	color: #FFFFFF; 
 	background-color: #437DFF; 
