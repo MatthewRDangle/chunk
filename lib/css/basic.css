@@ -210,7 +210,7 @@ a:hover, .anchor:hover {
 /* 
 ** User selection. 
 ** Description: Modifies the highlight color of the website.
-** Note: .inlineHighlight is to be used with inline elements only.
+** Note: .section is intended to be used with inline elements only.
 ** Note: Compatibility for IE9 and higher.
 */
 
