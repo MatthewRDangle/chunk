@@ -355,3 +355,47 @@ button:hover {
 	color: #000000;
 	background-color: #FFFFFF;
 }
+
+/* 
+** UnOrdered List Elements. 
+** Description: Controls the unordered list html tag <ul>.
+*/
+
+/* [Tag Names] */
+ul {
+	/* Display */
+	display: block;
+	
+	/* Size */
+	padding: 0 0 0 40px;
+	margin: 1em 0;
+	
+	/* Aesthetic */
+	list-style-type: disc;
+}
+li {
+	/* Display */
+	display: list-item;
+}
+
+/*
+** Ordered List Elements.
+** Description: Controls the ordered list html tag oul>.
+*/
+
+/* [Tag Names] */
+ol {
+	/* Display */
+	display: block;
+	
+	/* Size */
+	padding: 0 0 0 40px;
+	margin: 1em 0;
+	
+	/* Aesthetic */
+	list-style-type: decimal;	
+}
+li {
+	/* Display */
+	display: list-item;
+}
