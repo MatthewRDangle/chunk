@@ -22,7 +22,12 @@
 */
 
 /* [Tag Names] */
-html, body {
+html {
+	/* Size */
+	padding: 0 0;
+	margin: 0 0;	
+}
+body {
 	/* Size */
 	padding: 0 5%;
 	margin: 0 0;
@@ -195,6 +200,22 @@ ins, u {
 	/* Aesthetic */
 	text-decoration: underline;
 }
+cite {
+	/* Aesthetic */
+	font-style: italic;	
+}
+q {
+	/* Display */
+	display: inline;
+}
+q::before {
+	/* Content */
+	content: open-quote;
+}
+q::after {
+	/* Content */
+	content: close-quote;
+}
 
 /* 
 ** Anchors
@@ -213,6 +234,43 @@ a, .anchor {
 a:hover, .anchor:hover {
 	/* Aesthetic */
 	color: #4553fb;
+}
+
+/*
+** Blockquote
+** Description: Wrap large quotes around some text.
+*/
+
+/* [Tag Names] */
+blockquote {
+	/* Display */
+	display: block;
+	
+	/* Content */
+	position: relative;
+	
+	/* Size */
+	margin: 1em 40px;
+}
+blockquotes::before {
+	/* Display */
+    position: absolute;
+    	top: -6px;
+    	left: -25px;
+	
+	/* Content */
+	content: open-quote;
+	font-size: 3em;
+}
+blockquotes::after {
+	/* Display */
+    position: absolute;
+    	top: 10px;
+    	right: -25px;
+	
+	/* Content */
+	content: close-quote;
+	font-size: 3em;
 }
 
 /* 
