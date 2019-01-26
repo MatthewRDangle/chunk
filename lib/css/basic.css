@@ -179,13 +179,21 @@ span {
 	/* Display */
 	display: inline;
 }
-i {
-	/* Content */
+em, i {
+	/* Aesthetic */
 	font-style: italic;	
 }
-strong {
-	/* Content */
+strong, b {
+	/* Aesthetic */
 	font-weight: bold;
+}
+del, s {
+	/* Aesthetic */
+	text-decoration: line-through;
+}
+ins, u {
+	/* Aesthetic */
+	text-decoration: underline;
 }
 
 /* 
@@ -380,7 +388,7 @@ li {
 
 /*
 ** Ordered List Elements.
-** Description: Controls the ordered list html tag oul>.
+** Description: Controls the ordered list html tag ol>.
 */
 
 /* [Tag Names] */
@@ -398,4 +406,97 @@ ol {
 li {
 	/* Display */
 	display: list-item;
+}
+
+/*
+** Table Elements.
+** Description: Controls the render structure of table elements.
+*/
+
+/* [Tag Names] */
+table {
+	/* Display */
+	display: table;
+	
+	/* Size */
+	border-size: inherit;
+	
+	/* Content */
+	text-align: left;
+	
+	/* Aesthetic */
+	border-color: inherit;
+	border-style: inherit;
+}
+caption {
+	/* Display */
+	display: table-caption;
+	
+	/* Content */
+	text-align: center;
+}
+thead {
+	/* Display */
+	display: table-header-group;
+	
+	/* Content */
+	text-align: inherit;
+	vertical-align: middle;
+}
+tbody {
+	/* Display */
+	display: table-row-group;
+	
+	/* Content */
+	text-align: inherit;
+	vertical-align: middle;
+}
+tfoot {
+	/* Display */
+	display: table-footer-group;
+	
+	/* Content */
+	text-align: inherit;
+	vertical-align: middle;
+}
+tr {
+	/* Display */
+	display: table-row;
+}
+th {
+	/* Display */
+	display: table-cell;
+	
+	/* Size */
+	border-size: inherit;
+	
+	/* Content */
+	text-align: inherit;
+	
+	/* Aesthetic */
+	font-weight: bold;
+	border-color: inherit;
+	border-style: inherit;
+}
+td {
+	/* Display */
+	display: table-cell;
+	
+	/* Size */
+	border-size: inherit;
+	
+	/* Content */
+	text-align: inherit;
+	
+	/* Aesthetic */
+	border-color: inherit;
+	border-style: inherit;
+}
+colgroup {
+	/* Display */
+	display: table-column-group;
+}
+col {
+	/* Display */
+	display: table-column;
 }
