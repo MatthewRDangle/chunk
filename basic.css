@@ -48,7 +48,7 @@ body {
 }
 
 /* 
-** Font Properties
+** Title: Font Properties
 ** Description: Controls how the text will scale. Using only (em's) ensures the font size only needs to be entered once.
 */
 
@@ -223,7 +223,7 @@ q::after {
 }
 
 /* 
-** Anchors
+** Title: Anchors
 ** Description: Changes the display of anchor tags.
 */
 
@@ -242,7 +242,7 @@ a:hover, .anchor:hover {
 }
 
 /*
-** Blockquote
+** Title: Blockquote
 ** Description: Wrap large quotes around some text.
 */
 
@@ -279,7 +279,7 @@ blockquotes::after {
 }
 
 /* 
-** User selection. 
+** Title: User selection. 
 ** Description: Modifies the highlight color of the website.
 ** Note: .section is intended to be used with inline elements only.
 ** Note: Compatibility for IE9 and higher.
@@ -303,7 +303,7 @@ blockquotes::after {
 }
 
 /*
-** Scrollbar Properties
+** Title: Scrollbar Properties
 ** Description: Changes the look and feel of the scrollbar.
 ** Note: As of October 16, 2018, this does not work with firefox or edge.
 ** Note: https://css-tricks.com/custom-scrollbars-in-webkit/
@@ -343,7 +343,7 @@ blockquotes::after {
 ::-webkit-resizer {}
 
 /* 
-** Form Elements 
+** Title: Form Elements 
 ** Description: Color and display properties for input boxes and textareas.
 */
 
@@ -431,7 +431,7 @@ button:hover {
 }
 
 /* 
-** UnOrdered List Elements. 
+** Title: UnOrdered List Elements. 
 ** Description: Controls the unordered list html tag <ul>.
 */
 
@@ -453,7 +453,7 @@ li {
 }
 
 /*
-** Ordered List Elements.
+** Title: Ordered List Elements.
 ** Description: Controls the ordered list html tag ol>.
 */
 
@@ -475,7 +475,7 @@ li {
 }
 
 /*
-** Table Elements.
+** Title: Table Elements.
 ** Description: Controls the render structure of table elements.
 */
 
