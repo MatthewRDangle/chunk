@@ -311,6 +311,7 @@ blockquotes::after {
   width: 15px;
   height: 15px;
 }
+::-webkit-scrollbar-button {}
 ::-webkit-scrollbar-track {
   /* Aesthetic */
   background-color: transparent;
@@ -331,7 +332,7 @@ blockquotes::after {
 }
 ::-webkit-scrollbar-thumb:hover {
   /* Aesthetic */
-  background-color: transparent;
+  background-color: #4553fb;
 }
 ::-webkit-scrollbar-corner {}
 ::-webkit-resizer {}
