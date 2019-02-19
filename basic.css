@@ -16,6 +16,11 @@
 ------------------
 */
 
+/* 
+** Custom classnames used in this stylesheet. 
+** [.header, .subheader, .anchor, .selection] 
+*/
+
 /*
 ** Title: Theme Properties.
 ** Description: Adjuce global proeprties.
@@ -411,6 +416,7 @@ button {
 	border: 1px;
 	
 	/* Aesthetic */
+	cursor: pointer;
 	color: #FFFFFF;
 	background-color: #000000;
 	border-style: solid;
@@ -419,6 +425,7 @@ button {
 input[type="submit"]:hover, input[type="reset"]:hover,
 button:hover {
 	/* Aesthetic */
+	cursor: pointer;
 	color: #000000;
 	background-color: #FFFFFF;
 }
@@ -478,56 +485,91 @@ table {
 	display: table;
 	
 	/* Size */
-	border-size: inherit;
+	border-width: 1px;
 	
 	/* Content */
 	text-align: left;
 	
 	/* Aesthetic */
-	border-color: inherit;
-	border-style: inherit;
+	border-color: #000000;
+	border-style: solid;
 }
 caption {
 	/* Display */
 	display: table-caption;
 	
+	/* Size */
+	border-width: inherit;
+	
 	/* Content */
 	text-align: center;
+	
+	/* Aesthetic */
+	border-color: inherit;
+	border-style: inherit;
 }
 thead {
 	/* Display */
 	display: table-header-group;
 	
+	/* Size */
+	border-width: inherit;
+	
 	/* Content */
 	text-align: inherit;
 	vertical-align: middle;
+	
+	/* Aesthetic */
+	border-color: inherit;
+	border-style: inherit;
 }
 tbody {
 	/* Display */
 	display: table-row-group;
 	
+	/* Size */
+	border-width: inherit;
+	
 	/* Content */
 	text-align: inherit;
 	vertical-align: middle;
+	
+	/* Aesthetic */
+	border-color: inherit;
+	border-style: inherit;
 }
 tfoot {
 	/* Display */
 	display: table-footer-group;
 	
+	/* Size */
+	border-width: inherit;
+	
 	/* Content */
 	text-align: inherit;
 	vertical-align: middle;
+	
+	/* Aesthetic */
+	border-color: inherit;
+	border-style: inherit;
 }
 tr {
 	/* Display */
 	display: table-row;
+	
+	/* Size */
+	border-width: inherit;
+	
+	/* Aesthetic */
+	border-color: inherit;
+	border-style: inherit;
 }
 th {
 	/* Display */
 	display: table-cell;
 	
 	/* Size */
-	border-size: inherit;
+	border-width: inherit;
 	
 	/* Content */
 	text-align: inherit;
@@ -542,7 +584,7 @@ td {
 	display: table-cell;
 	
 	/* Size */
-	border-size: inherit;
+	border-width: inherit;
 	
 	/* Content */
 	text-align: inherit;
