@@ -1,5 +1,5 @@
 # basic.css
-A stylesheet to provide a starting point or an essential foundation for buliding CSS themes, templates, and/or frameworks. Basic.css groups together basic HTML element tags by function for efficence communication, construction, and conservation.
+A modern responsive CSS boilerplate. Use basic.css as a starting point to create an essential foundation for building CSS themes, templates, and/or frameworks.
 
 ---
 
