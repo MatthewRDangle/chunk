@@ -18,7 +18,7 @@
 
 /* 
 ** Custom classnames used in this stylesheet. 
-** [.header, .subheader, .anchor, .selection] 
+** [.wrapper .header, .subheader, .anchor, .selection] 
 */
 
 /*
@@ -45,6 +45,100 @@ body {
 	/* Aesthetic */
 	color: #000000;
 	background-color: #FFFFFF;
+}
+
+/*
+** Title: Wrapper.
+** Description: Controls whether an HTML element receives website margins or extends to the full width of the page.
+*/
+
+/* [Device Size Response] : Extra Small Devices */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+	.wrapper {
+		width: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* [Device Size Response] : Extra Small Devices - Small Cell Phones. */
+@media only screen (min-device-width : 320px) and (max-device-width : 480px) {
+	.wrapper {
+		width: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* [Device Size Response] : Small Devices - Large Cell Phones and Small Tablets.*/
+@media only screen (min-device-width : 480px) {
+	.wrapper {
+		width: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* [Device Size Response] : Medium Devices - Large Tablets and Small Laptops.*/
+@media only screen (min-device-width : 760px) {
+	.wrapper {
+		width: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* [Device Size Response] : Medium Devices - Large Tablets and Small Laptops.*/
+@media only screen (min-device-width : 920px) {
+	.wrapper {
+		width: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* [Device Size Response] : Medium Devices - Large Laptops and Small Desktops.*/
+@media only screen (min-device-width : 1100px) {
+	.wrapper {
+		width: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* [Device Size Response] : Medium Devices - Large Desktops, and Ultra Displays, Extra Small TV's.*/
+@media only screen (min-device-width : 1400px) {
+	.wrapper {
+		width: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* [Device Size Response] : Medium Devices - Small TV's*/
+@media only screen (min-device-width : 1600px) {
+	.wrapper {
+		width: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* [Device Size Response] : Large TV's.*/
+@media only screen (min-device-width : 2200px) {
+	.wrapper {
+		width: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* [Tag Names] */
+.wrapper .wrapper {
+	/* Size */
+	width: auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 /* 
