@@ -4,7 +4,7 @@
 ** Selector Groups: How the CSS selectors are organized for better readability.
 *** [Tag Names]: Where tag names are modified: may contain a class equivalent of the tag name.
 *** [Hierarchy]: The class structure for the HTML markup using _ (underscore) notation.
-*** [Extension]: A modification to a class structure using - (dash) notation.
+*** [Extension]: A modification to a class structure using (-) dash, (.) dot, (:, ::) or pseudo notation.
 *** [Device Size Response]: How the module will respond to different device sizes.
 *** [Column Size Response]: How the module will respond to different column sizes.
 ------------------
