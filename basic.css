@@ -18,7 +18,7 @@
 
 /* 
 ** Custom classnames used in this stylesheet. 
-** [.wrapper .header, .subheader, .anchor, .selection] 
+** [.wrapper .header, .subheader, .anchor, .selection, .section, .row, .column] 
 */
 
 /*
@@ -133,7 +133,7 @@ body {
 	}
 }
 
-/* [Tag Names] */
+/* [Hierarchy] */
 .wrapper .wrapper {
 	/* Size */
 	width: auto;
@@ -694,4 +694,47 @@ colgroup {
 col {
 	/* Display */
 	display: table-column;
+}
+
+/*
+** Title: Section.
+** Description: A group of like content.
+*/
+
+/* [Hierarchy] */
+.section {
+	/* Display */
+	display: block;
+	
+	/* Size */
+	padding: 0;
+	margin: 0;
+}
+
+/*
+** Title: Row.
+** Description: Groups content together to a single box model container.
+*/
+
+/* [Hierarchy] */
+.row {
+	/* Display */
+	display: block;
+	
+	/* Size */
+	padding: 0;
+	margin: 0;
+}
+
+/*
+** Title: Column.
+** Description: Controls site responsive
+*/
+.column {
+	/* Display */
+	float: left;
+	
+	/* Size */
+	padding: 0;
+	margin: 0;	
 }
