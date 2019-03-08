@@ -3,13 +3,30 @@ A modern responsive CSS boilerplate. Use basic.css as a starting point to create
 
 ---
 
-## What does it do?
-+ Establishes the ground work for design themes & systems.
-+ Creates styles for raw HTML elements.
-+ Designed to be edited after download.
-+ Make theme development easier.
-+ Improves usability and accessability.
-+ Detailed comments to explain the CSS.
+## What does it include?
++ Controllable alignment wrapping.
++ Global font control.
++ Complete control over fundemental HTML elements & speudo classes.
+  + headers 
+  + subheaders
+  + horizontal bars
+  + blockquotes
+  + anchor(hyperlink)
+  + selections(inline highlights)
+  + *scrollbars
+  + various form elements
+  + lists
+  + tables
++ Basic theme properties.
+  + Standard Global Font Color
+  + Global Background
++ Wireframing Kit
+  + Sections
+  + Rows
+  + Columns
+  
+## What do I use this boilerplate for?
+Basic.css is a template / starter kit to enable developers to create web based themes and associated frameworks quickly and efficiently. The ground work to create a basic theme has already been created for you; the stylehseet includes all commonly utilized HTML elements and classes. All you need to do is swap out some values and base your framework from this stylesheet.
 
 ## Browser Support
 + Chrome
