@@ -34,7 +34,7 @@ html {
 }
 body {
 	/* Size */
-	padding: 0 5%;
+	padding: 0 0;
 	margin: 0 0;
 	
 	/* Content */
@@ -53,83 +53,51 @@ body {
 *
 
 /* [Device Size Response] : Extra Small Devices - Small Cell Phones. */
-@media only screen (min-device-width : 320px) and (max-device-width : 480px) {
+@media only screen and (max-width: 480px) {
 	.wrapper {
-		width: auto;
-		margin-left: auto;
-		margin-right: auto;
+		padding-left: 5%;
+		padding-right: 5%;
 	}
 }
 
-/* [Device Size Response] : Small Devices - Large Cell Phones and Small Tablets.*/
-@media only screen (min-device-width : 480px) {
+/* [Device Size Response] : Small Devices - Large Cell Phones and Extra Small Tablets.*/
+@media only screen and (min-width: 480px) {
 	.wrapper {
-		width: auto;
-		margin-left: auto;
-		margin-right: auto;
+		padding-left: 6%;
+		padding-right: 6%;
 	}
 }
 
-/* [Device Size Response] : Medium Devices - Large Tablets and Small Laptops.*/
-@media only screen (min-device-width : 760px) {
+/* [Device Size Response] : Medium Devices - Small Tablets.*/
+@media only screen and (min-width: 760px) {
 	.wrapper {
-		width: auto;
-		margin-left: auto;
-		margin-right: auto;
+		padding-left: 8%;
+		padding-right: 8%;
 	}
 }
 
-/* [Device Size Response] : Medium Devices - Large Tablets and Small Laptops.*/
-@media only screen (min-device-width : 920px) {
+/* [Device Size Response] : Medium Devices - Large Tablets Small Laptops.*/
+@media only screen and (min-width: 920px) {
 	.wrapper {
-		width: auto;
-		margin-left: auto;
-		margin-right: auto;
+		padding-left: 9%;
+		padding-right: 9%;
 	}
 }
 
 /* [Device Size Response] : Medium Devices - Large Laptops and Small Desktops.*/
-@media only screen (min-device-width : 1100px) {
+@media only screen and (min-width: 1100px) {
 	.wrapper {
-		width: auto;
-		margin-left: auto;
-		margin-right: auto;
+		padding-left: 10%;
+		padding-right: 12%;
 	}
 }
 
-/* [Device Size Response] : Medium Devices - Large Desktops, and Ultra Displays, Extra Small TV's.*/
-@media only screen (min-device-width : 1400px) {
+/* [Device Size Response] : Medium Devices - Large Desktops.*/
+@media only screen and (min-width: 1400px) {
 	.wrapper {
-		width: auto;
-		margin-left: auto;
-		margin-right: auto;
+		padding-left: 12%;
+		padding-right: 12%;
 	}
-}
-
-/* [Device Size Response] : Medium Devices - Small TV's*/
-@media only screen (min-device-width : 1600px) {
-	.wrapper {
-		width: auto;
-		margin-left: auto;
-		margin-right: auto;
-	}
-}
-
-/* [Device Size Response] : Large TV's.*/
-@media only screen (min-device-width : 2200px) {
-	.wrapper {
-		width: auto;
-		margin-left: auto;
-		margin-right: auto;
-	}
-}
-
-/* [Hierarchy] */
-.wrapper .wrapper {
-	/* Size */
-	width: auto;
-	margin-left: auto;
-	margin-right: auto;
 }
 
 /* 
