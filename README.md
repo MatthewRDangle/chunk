@@ -4,8 +4,8 @@ A modern responsive CSS boilerplate. Use basic.css as a starting point to create
 ---
 
 ## What does it include?
-+ Controllable alignment wrapping.
-+ Global font control.
++ Element based alignment wrapping.
++ Global font properties.
 + Complete control over fundemental HTML elements & speudo classes.
   + headers 
   + subheaders
