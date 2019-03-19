@@ -50,7 +50,7 @@ body {
 /*
 ** Title: Wrapper.
 ** Description: Controls whether an HTML element receives website margins or extends to the full width of the page (technically, wrapper container).
-*
+*/
 
 /* [Device Size Response] : Extra Small Devices - Small Cell Phones. */
 @media only screen and (max-width: 480px) {
