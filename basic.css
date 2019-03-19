@@ -23,7 +23,7 @@
 
 /*
 ** Title: Theme Properties.
-** Description: Adjuce global proeprties.
+** Description: Adjust global properties.
 */
 
 /* [Tag Names] */
@@ -96,7 +96,7 @@ body {
 @media only screen and (min-width: 1400px) {
 	.wrapper {
 		padding-left: 12%;
-		padding-right: 12%;
+		padding-right:  ()12%;
 	}
 }
 
