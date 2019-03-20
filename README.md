@@ -13,7 +13,7 @@ A modern responsive CSS boilerplate. Use basic.css as a starting point to create
   + blockquotes
   + anchor(hyperlink)
   + selections(inline highlights)
-  + *scrollbars
+  + scrollbars
   + various form elements
   + lists
   + tables
