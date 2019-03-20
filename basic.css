@@ -656,44 +656,12 @@ col {
 }
 
 /*
-** Title: Section.
-** Description: A group of like content.
+** Title: Chunk.
+** Description: A declaration for the following classes are independent only on each other.
 */
 
 /* [Hierarchy] */
-.section {
+.chunk {
 	/* Display */
 	display: block;
-	
-	/* Size */
-	padding: 0;
-	margin: 0;
-}
-
-/*
-** Title: Row.
-** Description: Groups content together to a single box model container.
-*/
-
-/* [Hierarchy] */
-.row {
-	/* Display */
-	display: block;
-	
-	/* Size */
-	padding: 0;
-	margin: 0;
-}
-
-/*
-** Title: Column.
-** Description: Controls site responsive
-*/
-.column {
-	/* Display */
-	float: left;
-	
-	/* Size */
-	padding: 0;
-	margin: 0;	
 }
