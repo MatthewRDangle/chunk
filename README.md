@@ -1,9 +1,9 @@
 # Chunk
-A modern responsive CSS boilerplate. Use basic.css as a starting point to create an essential foundation for building CSS themes, templates, and/or frameworks.
+A responsive framework and methodology for writing reusable markup. Use chunk.css as a starting point to create a powerful foundation for building CSS and HTML themes.
 
 ---
 
-## What does it include?
+## What does the css include?
 + Element based alignment wrapping.
 + Global font properties.
 + Complete control over fundemental HTML elements & speudo classes.
@@ -20,15 +20,11 @@ A modern responsive CSS boilerplate. Use basic.css as a starting point to create
 + Basic theme properties.
   + Standard Global Font Color
   + Global Background
-+ Wireframing Kit
-  + Sections
-  + Rows
-  + Columns
-  
-## What do I use this boilerplate for?
-Basic.css is a template / starter kit to enable developers to create web based themes and associated frameworks quickly and efficiently. The ground work to create a basic theme has already been created for you; the stylehseet includes all commonly utilized HTML elements and classes. All you need to do is swap out some values and base your framework from this stylesheet.
++ Modular Chunk
 
 ## Browser Support
+Currently full browser support.
+
 + Chrome
 + Edge
 + Firefox
