@@ -1,17 +1,26 @@
-/*
- * The purpose of a chunk right now is to build out put an HTML component, automate use case documentation, and to create reusable rendering functions.
-*/
+//====================================================================
+// METHODS FOR CHUNK
+//====================================================================
 
-let chunk =  {
-	name: 'button',
-	descr: '',
-	modifiers: '',
-	prefix: 'chunk',
-	tag: 'div',
-	attr: {},
-	render: function(variables) {
-		/*
-		Build logic. The developer should be able to use any framework they want here that may produce a component. 
-		 */
+/*
+ * The Chunk Web Component Prototype Object.
+*/
+function Chunk(name, type) {
+	
+	/* Initialize Base Attributes */
+	if (!name || typeof name !== 'string')
+		throw Error('A chunk must be given a name.');
+	this.name = name;
+
+	if (!type || typeof type !== 'string' )
+		this.type = 'component';
+	else
+		this.type = type;
+	
+	/* Enable Rendering */
+	this.render = function() {
+		var chunk = document.createElement("div");
+		chunk.className = this.name;
+		return chunk;
 	}
 }
