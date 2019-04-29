@@ -1,75 +1,75 @@
 "use strict"; //Changes accepted "bad syntax" into real errors.
 
 //====================================================================
-// METHODS FOR CHUNK
+// Chunky
 //====================================================================
 
-/* 
- * Object to remember all methods for Chunky. 
- * Wrapped function around methods to protect global space.
+/*
+ * Constructor: Chunk
+ * 
+ * @param name string - A unique name for this chunk describing it's most basic function. (ex. Card, Button, Linger, preview, tile, libraryItem).
+ * @param type string - default is 'component' (web component). Write to this if needed, to better describe your component (ex. structure, container, global).
+ * @param prefix string - default is 'chunk'. This is the first class to be added to the class name of this component.
 */
-var chunk = {};
-(function() {
+function chunk (name, type, prefix) {
 
-	/*
-	 * Constructor.
-	 * The Chunk Web Component Prototype Constructor.
-	 * 
-	 * @param name string - A unique name for this chunk describing it's most basic function. (ex. Card, Button, Linger, preview, tile, libraryItem).
-	 * @param prefix - default is 'chunk'. This is the first class to be added to the class name of this component.
-	 * @param type string - default is 'component' (web component). Write to this if needed, to better describe your component (ex. structure, container, global).
-	*/
-	chunk.constructor = function (name, prefix, type) {
+	/* Validate and Assign Name for Chunk. */
+	if (!name || typeof name !== 'string')
+		throw Error('A chunk must be given a name.');
+	this.name = name;
 
-		/* Validate and Assign Name for Chunk. */
-		if (!name || typeof name !== 'string')
-			throw Error('A chunk must be given a name.');
-		this.name = name;
-
-		/* Assign default prefix is none exists. */
-		if (!prefix)
-			this.prefix = 'chunk';
-		else
-			this.prefix = prefix;
-		
-		/* Validate and Assign Type for Chunk. */
-		if (!type || typeof type !== 'string' )
-			this.type = 'component'; // Default Value for Chunk.
-		else
-			this.type = type;
-		
-		/* Create a container to hold attributes. */
-		this.attr = {};	
-		
-		/* Create a modification tree. */
-		this.mods = {
-			variables: [],
-			locals: [],
-			globals: []
-		};
-		
-		/* Enable Build Controls. */
-		this.instruction = function(tag, attr, children) {
-			
-			/* Construct Parent */
-			var container = document.createElement('div');
-			main.appendChild(text);
-		}
-		this.build = null;
-	}
+	/* Assign default ClassName prefix if none exists. */
+	if (!prefix)
+		this.prefix = 'chunk';
+	else
+		this.prefix = prefix;
 	
-	/* 
-	 * Enable Rendering 
-	*/
-	chunk.constructor.prototype.render = function() {
-		
-		/* Check to see if build is set up correctly. */
-		if (typeof this.build !== 'function') {
-			throw Error('There are no build instructions for ' + this.prefix + ' ' + this.name);
-			return; /* Leave the function and don't attempt to build. */
-		}
+	/* Validate and Assign Type for Chunk. */
+	if (!type || typeof type !== 'string' )
+		this.type = 'component'; // Default Value for Chunk.
+	else
+		this.type = type;
+	
+	/* Create a attribute tree. */
+	this.attr = {};	
+	
+	/* Create a modification tree. */
+	this.mods = {
+		variables: []
+	};
+	
+	/* Create place holder for build controls. */
+	this.build = null;
+}
+	
+/* 
+ * Method: Print.
+ * Description: Render legible HTMl text.
+*/
+chunk.prototype.print = function(string) {
+	
+	/* Get a String if it does not exist. */
+	if (!string)
+		string = this.build(this).outerHTML;
+	
+	/* Return legible HTML. */
+	return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
 
-		/* Return build. */
-		return this.build();
+/* 
+ * Method: Render
+ * Description: Send the chunk to the browser for rendering.
+*/
+chunk.prototype.render = function(chunk) {
+	if (!chunk || !chunk.type)
+		chunk = this;
+		
+	/* Check to see if build is set up correctly. */
+	if (typeof chunk.build !== 'function') {
+		throw Error('There are no build instructions for ' + chunk.prefix + ' ' + chunk.name);
+		return ''; /* Leave the function and don't attempt to build. */
 	}
-}())
+
+	/* Return build. */
+	return chunk.build(chunk);
+}
