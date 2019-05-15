@@ -30,16 +30,33 @@ function chunk (name, type, prefix) {
 	else
 		this.type = type;
 	
-	/* Create a attribute tree. */
-	this.attr = {};	
-	
 	/* Create a modification tree. */
-	this.mods = {
-		variables: []
-	};
+	this.mods = {};
 	
 	/* Create place holder for build controls. */
 	this.build = null;
+}
+
+/*
+ * Method: Add Modification.
+ * Description: Add an attribute to the HTML.
+ */
+chunk.prototype.createMod = function(name, value, container) {
+	
+	/* Check to see if name will be placed inside container. */
+	if (container && typeof container === "string") {
+		
+		/* Create the container is the container does not already exist. */
+		if (!this.mods[container])
+			this.mods[container] = {};
+		
+		/* Add mod to container. */
+		var container = this.mods[container];
+		container[name] = value;
+	}
+
+	/* Add mod to the base if it does not exist. */
+	this.mods[name] = value;
 }
 	
 /* 
