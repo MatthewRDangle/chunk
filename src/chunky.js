@@ -11,7 +11,7 @@
  * @param type string - default is 'component' (web component). Write to this if needed, to better describe your component (ex. structure, container, global).
  * @param prefix string - default is 'chunk'. This is the first class to be added to the class name of this component.
 */
-function chunk (name, type, prefix) {
+function chunk (name, options) {
 
 	// Validate and Assign Name for Chunk.
 	if (!name || typeof name !== 'string')
@@ -19,13 +19,13 @@ function chunk (name, type, prefix) {
 	this.name = name;
 
 	// Assign default ClassName prefix if none exists.
-	if (!prefix)
+	if (!options)
 		this.prefix = 'chunk';
 	else
 		this.prefix = prefix;
 	
 	// Validate and Assign Type for Chunk.
-	if (!type || typeof type !== 'string' )
+	if (!options.type || typeof options.type !== 'string' )
 		this.type = 'component'; // Default Value for Chunk.
 	else
 		this.type = type;
