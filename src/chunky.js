@@ -33,6 +33,9 @@ function chunk (name, type, prefix) {
 	// Create a modification tree.
 	this.mods = {};
 	
+	// Create a substitution tree.
+	this.subs = {};
+	
 	// Create place holder for build controls.
 	this.build = null;
 }
@@ -48,7 +51,7 @@ function chunk (name, type, prefix) {
 chunk.prototype.createMod = function(name, value, container) {
 
 	// Check to see if modification
-	if (!name || tyeof name !== 'string')
+	if (!name || typeof name !== 'string')
 		throw Error('A new modification must have a name of type String.');
 	
 	// Check to see if name will be placed inside container.
@@ -73,6 +76,7 @@ chunk.prototype.createMod = function(name, value, container) {
 	// Add mod to the base if it does not exist.
 	this.mods[name] = value;
 }
+
 	
 /* 
  * Method: Print.
@@ -104,4 +108,20 @@ chunk.prototype.render = function(chunk) {
 
 	// Return build.
 	return chunk.build(chunk);
+}
+
+/*
+ * Method: Sub
+ * Description: Creates a variable inside the build function.
+ */
+chunk.prototype.sub = function(name) {
+
+	//Check if name exists.
+	if (!name && typeof name !== 'string') { throw Error('To create a sub, the sub must have a name of type string.'); }
+	else {
+		//Add name to subs tree if it doesn't already exist.
+		if (this.subs.hasOwnProperty(name)) {
+			this.sub[name] = undefined;
+		}
+	}
 }
