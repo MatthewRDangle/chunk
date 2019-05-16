@@ -12,6 +12,9 @@
  * @param prefix string - default is 'chunk'. This is the first class to be added to the class name of this component.
 */
 function chunk (name, options) {
+	//Does options exist. 
+	if (!options)
+		options = {};
 
 	// Validate and Assign Name for Chunk.
 	if (!name || typeof name !== 'string')
@@ -19,11 +22,11 @@ function chunk (name, options) {
 	this.name = name;
 
 	// Assign default ClassName prefix if none exists.
-	if (!options)
+	if (!options.prefix)
 		this.prefix = 'chunk';
 	else
-		this.prefix = prefix;
-	
+		this.prefix = options.prefix;
+
 	// Validate and Assign Type for Chunk.
 	if (!options.type || typeof options.type !== 'string' )
 		this.type = 'component'; // Default Value for Chunk.
