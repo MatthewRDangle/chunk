@@ -60,14 +60,14 @@ function chunk (name, options) {
 		
 		
 	/**
-	 * Method: navPath.
+	 * Method: Nav Path.
 	 * Access: Private.
 	 * Description: Navigates through an objects properties to a specific location.
 	 * 
-	 * @param path string - 
-	 * @param obj obj - 
-	 * @param setPath boolean - 
-	 * @return value string - 
+	 * @param path string - The string path using backslash "/" to the mod property.
+	 * @param obj obj - The object to navigate.
+	 * @param setPath boolean - Whether or not the path should be set along the way: True or False.
+	 * @return value variable - The property value of the object after looping through it.
 	 */
 	var navPath = function(path, obj, setPath) {
 		//Set the base of the obj as parent for initial loop.
@@ -97,7 +97,7 @@ function chunk (name, options) {
 			parent = parent[pathArray[i]];
 		}
 		
-		// return obj property value if it exists.
+		// return the foudn obj property value.
 		return parent;
 	}
 	
