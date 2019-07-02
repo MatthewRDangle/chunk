@@ -334,4 +334,16 @@ function chunk (name, options) {
 		// Parse string then print.
 		return parseHTMLSpChr(string);
 	}
+	
+	/** 
+	 * Method: Ready.
+	 * Access: Public.
+	 * Description: Prepares the chunk for rendering.
+	*/
+	chunk.prototype.ready = function() {
+		if (!this.isCompiled) {
+			this.compile();
+			
+		return dataCompiled;
+	}
 })();
