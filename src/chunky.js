@@ -20,7 +20,7 @@ function chunk (name, options) {
 	// Validate and Assign Name for Chunk.
 	if (!name || typeof name !== 'string')
 		throw Error('A chunk must be given a name.');
-	this.name = name
+	this.name = name;
 
 	// Assign default ClassName prefix if none exists.
 	if (!options.prefix)
@@ -53,7 +53,7 @@ function chunk (name, options) {
 	 * Access: Public.
 	 * Description: Repository Component Identification: Used for internal reference and validation.
 	*/ 
-	chunk.prototype.RCID = 'chunky' // This should never change.
+	chunk.prototype.RCID = 'chunky'; // This should never change.
 		
 		
 		
