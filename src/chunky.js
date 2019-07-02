@@ -12,7 +12,8 @@
  * @param options.prefix string - default is 'chunk'. This is the first class to be added to the class name of this component.
 */
 function chunk (name, options) {
-	//Does options exist. 
+	
+	// Does options exist. 
 	if (!options)
 		options = {};
 
@@ -38,10 +39,68 @@ function chunk (name, options) {
 	
 	// Create place holder for build controls.
 	this.build = null;
+	
+	// Compiled data and validation.
+	this.isCompiled = false;
+	this.dataCompiled = null;
 }
 
 //Protect global space and separate privately accessible methods from public access.
 (function(){
+	
+	/**
+	 * Key: Parse Path.
+	 * Access: Public.
+	 * Description: Repository Component Identification: Used for internal reference and validation.
+	*/ 
+	chunk.prototype.RCID = 'chunky'
+		
+		
+		
+		
+		
+	/**
+	 * Method: navPath.
+	 * Access: Private.
+	 * Description: Navigates through an objects properties to a specific location.
+	 * 
+	 * @param path string - 
+	 * @param obj obj - 
+	 * @param setPath boolean - 
+	 * @return value string - 
+	 */
+	var navPath = function(path, obj, setPath) {
+		//Set the base of the obj as parent for initial loop.
+		var parent = obj;
+		
+		// Convert path to an array for loop.
+		var pathArray = []
+		if (typeof path !== 'array')
+			pathArray = parsePath(path);
+		else
+			pathArray = path;
+		
+		// Loop through the object based on the path.
+		for (var i in obj) {
+			
+			// If property does not exist return null or create a container placeholder.
+			if (!parent.hasOwnProperty(pathArray[i])) {
+				if (setPath) {
+					parent.pathArray[i] = {};
+				}
+				else {
+					return null	
+				}
+			}
+			
+			// Change parent
+			parent = parent[pathArray[i]];
+		}
+		
+		// return obj property value if it exists.
+		return parent;
+	}
+	
 	/**
 	 * Method: Parse Path.
 	 * Access: Private.
@@ -74,7 +133,7 @@ function chunk (name, options) {
 		
 		// Check for string.
 		if (!string || typeof string !== 'string')
-			throw Error('In order to convert, their must be a string parameter.');
+			throw Error('In order to convert, their must be a string parameter of type string.');
 		
 		// Return with cnoverted special characters.
 		return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -108,161 +167,16 @@ function chunk (name, options) {
 		}
 	}
 
-	/**
-	 * Method: Create Modification.
-	 * Access: Public.
-	 * Description: Add an attribute to the HTML.
-	 * 
-	 * @param name string - The object key reference for this modification.
-	 * @param value unset - The value of the modification.
-	 * @param path string - The location of where to store the mod.
-	 */
-	chunk.prototype.createMod = function(name, value, path) {
-
-		// Check to see if name exists.
-		if (!name || typeof name !== 'string')
-			throw Error('A new modification must have a name of type String.');
-		
-		// Check to see if value exists.
-		if (!value)
-			throw Error('A value must exist to create a mod');
-		
-		// Store mod at path location.
-		if (path && typeof path === 'string') {
-			var pathArray = parsePath(path);
-			var parent = this.mods;
-			
-			// Store mod in that path.
-			for (var i in pathArray) {
-				
-				// Create the child if it doesn't already exist.
-				if (!parent.hasOwnProperty(pathArray[i]))
-					parent[pathArray[i]] = {};
-				
-				// Change parent
-				parent = parent[pathArray[i]];
-			}
-			
-			// Only create a new mod if the mod doesn't already exist.
-			if (parent.hasOwnProperty(name))
-				throw Error('A modification with this name already exists.');
-			else
-				parent[name] = value;
-		}
-		// Store mod at base if no path.
-		else {
-			
-			// Only create a new mod if the mod doesn't already exist.
-			if (this.mods.hasOwnProperty(name))
-				throw Error('A modification with this name already exists.');
-			else
-				this.mods[name] = value;
-		}
-	}
 	
-	/**
-	 * Method: Get Modification.
-	 * Access: Public.
-	 * Description: Retrieves a mod value.
-	 * 
-	 * @param name string - The name of the mod to acquire.
-	 * @param path string - The container path to the mod.
-	 */
-	function getMod(name, path) {
-		
-		// Check to see if name exists.
-		if (!name || typeof name !== 'string')
-			throw Error('A new modification must have a name of type String.');
-		
-		// Check to see if path exists.
-		if (!path || typeof path !== 'string')
-			throw Error('A new modification must have a name of type String.');
-		
-		// Store mod at path location.
-		if (path && typeof path === 'string') {
-			var pathArray = parsePath(path);
-			var parent = this.mods;
-			
-			// get parent container.
-			for (var i in pathArray) {
-				
-				// If parent does not exist return null.
-				if (!parent.hasOwnProperty(pathArray[i]))
-					return null
-				
-				// Change parent
-				parent = parent[pathArray[i]];
-			}
-			
-			// Return property value if it exists.
-			if (parent.hasOwnProperty(name))
-				return parent[name]
-			else
-				return null
-		}
-	}
 	
-	/**
-	 * Method: Set Modification.
-	 * Access: Public.
-	 * Description: Retrieves a mod value.
-	 * 
-	 * @param name string - The name of the mod to acquire.
-	 * @param path string - The container path to the mod.
-	 */
-	function setMod(name, path, value) {
-		
-		// Check to see if name exists.
-		if (!name || typeof name !== 'string')
-			throw Error('A new modification must have a name of type String.');
-		
-		// Check to see if path exists.
-		if (!path || typeof path !== 'string')
-			throw Error('A new modification must have a name of type String.');
-		
-		// Store mod at path location.
-		if (path && typeof path === 'string') {
-			var pathArray = parsePath(path);
-			var parent = this.mods;
-			
-			// get parent container.
-			for (var i in pathArray) {
-				
-				// If parent does not exist return null.
-				if (!parent.hasOwnProperty(pathArray[i]))
-					return null
-				
-				// Change parent
-				parent = parent[pathArray[i]];
-			}
-			
-			// Return property value if it exists.
-			if (parent.hasOwnProperty(name))
-				parent[name] = value;
-		}
-	}
-
-		
+	
+	
 	/** 
-	 * Method: Print.
+	 * Method: Compile
 	 * Access: Public.
-	 * Description: Render legible HTMl text.
+	 * Description: Run the build function and convert the data into the chunk logic properties.
 	*/
-	chunk.prototype.print = function(string) {
-		
-		// Get a String if it does not exist.
-		if (!string)
-			string = this.build(this).outerHTML;
-		
-		return parseHTMLSpChr(string);
-	}
-
-	/** 
-	 * Method: Render
-	 * Access: Public.
-	 * Description: Send the chunk to the browser for rendering.
-	*/
-	chunk.prototype.render = function(chunk) {
+	chunk.prototype.compile = function(chunk) {
 		if (!chunk || !chunk.type)
 			chunk = this;
 			
@@ -272,7 +186,66 @@ function chunk (name, options) {
 			return ''; // Leave the function and don't attempt to build.
 		}
 
-		// Return build.
-		return chunk.build(chunk);
+		// Return compiled data from build function the data was returned.
+		var dataCompiled =  chunk.build(chunk);
+		if (!dataCompiled) {
+			throw Error ('No data was returned from chunk ' + chunk.name + ' build function. Please add a return statement to return all data to be rendered.');
+		}
+		else {
+			this.dataCompiled = dataCompiled;
+			this.isCompiled = true;
+			return this.dataCompiled;
+		}
+			
+		
+		
+	}
+	
+	/**
+	 * Method: Mod
+	 * Access: Public.
+	 * Description: Modifies or retrieves a mod from the mods object.
+	 * 
+	 * @param path string - [Required] - The string path using backslash "/" to the mod property.
+	 * @param value string - [Optional]- To set the mods value.
+	*/
+	function mod(path, value) {
+		
+		// Check to see if path exists.
+		if (!path || typeof path !== 'string')
+			throw Error('The path to the mod is required as the first parameter.');
+		
+		// Turn the path into an array and retrieve the mods object as the parent.
+		var parent = this.mods;
+		
+		// Navigate to the mods' container and retrieve the mod value or set it's value.
+		if (value) {
+			// Convert string path to array.
+			var pathArray = parsePath(path);
+			
+			// navigate to mods parent container.
+			var modPath = new Array(pathArray);
+			var modParent = navPath(modPath.pop(), parent, true);
+			
+			// Retrieve mod value from od parent.
+			if (modParent.hasOwnProperty(pathArray[pathArray.length - 1])) {
+				modParent[pathArray[pathArray.length - 1])] = value;
+				return true;
+			}
+		}
+		else
+			return navPath(path, parent);
+	}
+
+		
+	/** 
+	 * Method: Print.
+	 * Access: Public.
+	 * Description: Compile the chunk into legible HTMl text.
+	*/
+	chunk.prototype.print = function(string) {
+		
+		// Parse string then print.
+		return parseHTMLSpChr(string);
 	}
 })();
