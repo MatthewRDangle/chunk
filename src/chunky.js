@@ -38,7 +38,7 @@ function chunk (name, options) {
 	this.mods = {};
 	
 	// Create place holder for build controls.
-	this.build = null;
+	this.blueprints = null;
 	
 	// Compiled data and validation.
 	this.isCompiled = false;
@@ -221,10 +221,24 @@ function chunk (name, options) {
 	
 	
 	
+	/**
+	 * Method: Build
+	 * Access: Public.
+	 * Description: Enables the user to construct build logic for it's chunk.
+	 * 
+	 * @param func function - [Required] - Build logic function.
+	*/
+	chunk.prototype.build = function(func) {
+		
+		// Push to main object.
+		this.isCompiled = false;
+		this.blueprints = func;
+	}
+	
 	/** 
 	 * Method: Compile
 	 * Access: Public.
-	 * Description: Run the build function and convert the data into the chunk logic properties.
+	 * Description: Run the blueprints function and convert the data into the chunk logic properties.
 	*/
 	chunk.prototype.compile = function(chunk) {
 		
@@ -232,15 +246,15 @@ function chunk (name, options) {
 		if (!chunk || !chunk.type)
 			chunk = this;
 			
-		// Check to see if build is set up correctly.
-		if (typeof chunk.build !== 'function') {
-			throw Error('There are no build instructions for ' + chunk.prefix + ' ' + chunk.name);
+		// Check to see if blueprints is set up correctly.
+		if (typeof chunk.blueprints !== 'function') {
+			throw Error('There are no blueprints for ' + chunk.prefix + ' ' + chunk.name);
 		}
 
-		// Return compiled data from build function.
-		var dataCompiled =  chunk.build(chunk);
+		// Return compiled data from blueprints function.
+		var dataCompiled =  chunk.blueprints(chunk);
 		if (!dataCompiled) {
-			throw Error ('No data was returned from chunk ' + chunk.name + ' build function. Please add a return statement to return all data to be rendered.');
+			throw Error ('No data was returned from chunk ' + chunk.name + ' blueprints function. Please add a return statement to return all data to be rendered.');
 		}
 		else {
 			this.dataCompiled = dataCompiled;
@@ -264,7 +278,7 @@ function chunk (name, options) {
 		
 		// Modify duplicates properties to match the original.
 		duplicate_chunk.mods = clone(this.mods);
-		duplicate_chunk.build = this.build;
+		duplicate_chunk.blueprints = this.blueprints;
 		if (this.isCompiled)
 			duplicate_chunk.compile();
 
