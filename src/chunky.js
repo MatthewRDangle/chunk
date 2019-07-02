@@ -209,7 +209,7 @@ function chunk (name, options) {
 	 * @param path string - [Required] - The string path using backslash "/" to the mod property.
 	 * @param value string - [Optional]- To set the mods value.
 	*/
-	function mod(path, value) {
+	chunk.prototype.mod = function(path, value) {
 		
 		// Check to see if path exists.
 		if (!path || typeof path !== 'string')
@@ -229,7 +229,7 @@ function chunk (name, options) {
 			
 			// Retrieve mod value from od parent.
 			if (modParent.hasOwnProperty(pathArray[pathArray.length - 1])) {
-				modParent[pathArray[pathArray.length - 1])] = value;
+				modParent[pathArray[pathArray.length - 1]] = value;
 				return true;
 			}
 		}
