@@ -20,7 +20,7 @@ function chunk (name, options) {
 	// Validate and Assign Name for Chunk.
 	if (!name || typeof name !== 'string')
 		throw Error('A chunk must be given a name.');
-	this.name = name;
+	this.name = name
 
 	// Assign default ClassName prefix if none exists.
 	if (!options.prefix)
@@ -32,7 +32,7 @@ function chunk (name, options) {
 	if (!options.type || typeof options.type !== 'string' )
 		this.type = 'component'; // Default Value for Chunk.
 	else
-		this.type = type;
+		this.type = options.type;
 	
 	// Create a modification tree.
 	this.mods = {};
@@ -53,11 +53,57 @@ function chunk (name, options) {
 	 * Access: Public.
 	 * Description: Repository Component Identification: Used for internal reference and validation.
 	*/ 
-	chunk.prototype.RCID = 'chunky'
+	chunk.prototype.RCID = 'chunky' // This should never change.
 		
 		
 		
 		
+				
+	/**
+	 * Method: Clone Object.
+	 * Access: Private.
+	 * Description: Copy all object properties and values without reference.
+	 * 
+	 * @param original anything - [Required] - The thing which to copy.
+	 */
+	var clone = function(original) {
+		
+		// If the clone is an object, clone this way...
+		if (typeof original === 'object') {
+			
+			// Set base clone object.
+			var clone_obj = {};
+			
+			// Loop through object and clone all object properties.
+			for (var i = 0; i < original.length; i++) {
+				var property = original[i];
+				if (original.hasOwnProperty(property))
+					clone_obj[property] = clone(original[property]);
+			}
+			
+			// Returned cloned object.
+			return clone_obj;
+		}
+		
+		// If the clone is an array, clone this way...
+		else if (typeof original === '[object Array]') {
+			
+			// Set base clone object.
+			var clone_array = {};
+			
+			// Loop through object and clone all array properties.
+			for (var i = 0; i < original.length; i++) {
+				clone_obj[i] = clone(original[i]);
+			}
+			
+			// Returned cloned array.
+			return clone_array;
+		}
+		
+		// Anything else, return the original.
+		else
+			return original;
+	}
 		
 	/**
 	 * Method: Nav Path.
@@ -79,7 +125,7 @@ function chunk (name, options) {
 			pathArray = parsePath(path);
 		else
 			pathArray = path;
-		
+
 		// Loop through the object based on the path.
 		for (var i in obj) {
 			
@@ -139,6 +185,10 @@ function chunk (name, options) {
 		return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 	}
 	
+	var templateChunk = function() {
+		
+	}
+	
 	/**
 	 * Method: ValidateJSONname.
 	 * Access: Private.
@@ -166,7 +216,7 @@ function chunk (name, options) {
 				return true;
 		}
 	}
-
+	
 	
 	
 	
@@ -177,16 +227,17 @@ function chunk (name, options) {
 	 * Description: Run the build function and convert the data into the chunk logic properties.
 	*/
 	chunk.prototype.compile = function(chunk) {
+		
+		// If chunk parameter doesn't exist, assume this chunk.
 		if (!chunk || !chunk.type)
 			chunk = this;
 			
 		// Check to see if build is set up correctly.
 		if (typeof chunk.build !== 'function') {
 			throw Error('There are no build instructions for ' + chunk.prefix + ' ' + chunk.name);
-			return ''; // Leave the function and don't attempt to build.
 		}
 
-		// Return compiled data from build function the data was returned.
+		// Return compiled data from build function.
 		var dataCompiled =  chunk.build(chunk);
 		if (!dataCompiled) {
 			throw Error ('No data was returned from chunk ' + chunk.name + ' build function. Please add a return statement to return all data to be rendered.');
@@ -196,9 +247,29 @@ function chunk (name, options) {
 			this.isCompiled = true;
 			return this.dataCompiled;
 		}
-			
+	}
+	
+	/** 
+	 * Method: Duplicate
+	 * Access: Public.
+	 * Description: Creates an exact copy of this chunk and returns it as a new object.
+	*/
+	chunk.prototype.duplicate = function(name) {
 		
+		//Create a New Chunk
+		var duplicate_chunk = new chunk(name, {
+			type: this.type,
+			prefix: this.prefix
+		})
 		
+		// Modify duplicates properties to match the original.
+		duplicate_chunk.mods = clone(this.mods);
+		duplicate_chunk.build = this.build;
+		if (this.isCompiled)
+			duplicate_chunk.compile();
+
+		// Return duplicate
+		return duplicate_chunk;
 	}
 	
 	/**
@@ -217,20 +288,19 @@ function chunk (name, options) {
 		
 		// Turn the path into an array and retrieve the mods object as the parent.
 		var parent = this.mods;
-		
+
 		// Navigate to the mods' container and retrieve the mod value or set it's value.
 		if (value) {
 			// Convert string path to array.
 			var pathArray = parsePath(path);
 			
 			// navigate to mods parent container.
-			var modPath = new Array(pathArray);
+			var modPath = parsePath(path);
 			var modParent = navPath(modPath.pop(), parent, true);
 			
 			// Retrieve mod value from od parent.
 			if (modParent.hasOwnProperty(pathArray[pathArray.length - 1])) {
 				modParent[pathArray[pathArray.length - 1]] = value;
-				return true;
 			}
 		}
 		else
@@ -241,7 +311,9 @@ function chunk (name, options) {
 	/** 
 	 * Method: Print.
 	 * Access: Public.
-	 * Description: Compile the chunk into legible HTMl text.
+	 * Description: Compile the chunk into legible HTML text.
+	 * 
+	 * @param string string - [Required] - A string of HTML which to parse into legible HTML text.
 	*/
 	chunk.prototype.print = function(string) {
 		
