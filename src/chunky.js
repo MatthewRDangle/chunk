@@ -43,6 +43,9 @@ function chunk (name, options) {
 	// Compiled data and validation.
 	this.isCompiled = false;
 	this.dataCompiled = null;
+	
+	// Used to find parent template.
+	this.template = undefined;
 }
 
 //Protect global space and separate privately accessible methods from public access.
@@ -54,6 +57,15 @@ function chunk (name, options) {
 	 * Description: Repository Component Identification: Used for internal reference and validation.
 	*/ 
 	chunk.prototype.RCID = 'chunky'; // This should never change.
+	
+	/**
+	 * Key: allTemplates.
+	 * Access: Public.
+	 * Description: An object containing a record of all template chunks and it's children.
+	*/
+	chunk.prototype.allTemplates = function () {
+		
+	}
 		
 		
 		
@@ -341,9 +353,46 @@ function chunk (name, options) {
 	 * Description: Prepares the chunk for rendering.
 	*/
 	chunk.prototype.ready = function() {
-		if (!this.isCompiled) {
+		if (!this.isCompiled)
 			this.compile();
 			
 		return dataCompiled;
+	}
+	
+	/**
+	 * Method: Template.
+	 * Access: Public.
+	 * Description: Creates a references chunk for everything except mods. Mods are unique to a chunk.
+	*/
+	chunk.prototype.template = function () {
+		
+		// Create a New Chunk
+		var templated_chunk = new chunk(name, {
+			type: this.type,
+			prefix: this.prefix,
+			template: this.name
+		})
+		
+		// Check to see if template object already exists.
+		var templateObj = null;
+		for (var i = 0; i < this.allTemplates.length; i++) {
+			if (this.allTemplates[i].template === this.template)
+				templateObj = this.allTemplates[i].template
+		}
+		
+		// If it does not exist, create it.
+		if (!templateObj) {
+			templateObj = {
+				template: this,
+				children: []
+			}
+			this.allTemplates.push(templateObj);
+		}
+
+		// Push the child into the children array.
+		templateObj.children.push(templated_chunk);
+
+		// Return templated object.
+		return templated_chunk;	
 	}
 })();
