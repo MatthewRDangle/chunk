@@ -130,7 +130,7 @@ function chunk (name, options) {
 	var navPath = function(path, obj, setPath) {
 		//Set the base of the obj as parent for initial loop.
 		var parent = obj;
-		
+	
 		// Convert path to an array for loop.
 		var pathArray = []
 		if (typeof path !== 'array')
@@ -142,7 +142,7 @@ function chunk (name, options) {
 		for (var i in obj) {
 			
 			// If property does not exist return null or create a container placeholder.
-			if (!parent.hasOwnProperty(pathArray[i])) {
+			if (!parent.hasOwnProperty(i)) {
 				if (setPath) {
 					parent.pathArray[i] = {};
 				}
@@ -152,10 +152,10 @@ function chunk (name, options) {
 			}
 			
 			// Change parent
-			parent = parent[pathArray[i]];
+			parent = parent[i];
 		}
 		
-		// return the foudn obj property value.
+		// return the found obj property value.
 		return parent;
 	}
 	
@@ -307,7 +307,7 @@ function chunk (name, options) {
 	 * @param value string - [Optional]- To set the mods value.
 	*/
 	chunk.prototype.mod = function(path, value) {
-		
+		debugger;
 		// Check to see if path exists.
 		if (!path || typeof path !== 'string')
 			throw Error('The path to the mod is required as the first parameter.');
@@ -324,10 +324,8 @@ function chunk (name, options) {
 			var modPath = parsePath(path);
 			var modParent = navPath(modPath.pop(), parent, true);
 			
-			// Retrieve mod value from od parent.
-			if (modParent.hasOwnProperty(pathArray[pathArray.length - 1])) {
-				modParent[pathArray[pathArray.length - 1]] = value;
-			}
+			// Set mod value.
+			modParent[pathArray[pathArray.length - 1]] = value;
 		}
 		else
 			return navPath(path, parent);
