@@ -307,7 +307,7 @@ function chunk (name, options) {
 	 * @param value string - [Optional]- To set the mods value.
 	*/
 	chunk.prototype.mod = function(path, value) {
-		debugger;
+
 		// Check to see if path exists.
 		if (!path || typeof path !== 'string')
 			throw Error('The path to the mod is required as the first parameter.');
