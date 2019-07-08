@@ -63,9 +63,7 @@ function chunk (name, options) {
 	 * Access: Public.
 	 * Description: An object containing a record of all template chunks and it's children.
 	*/
-	chunk.prototype.allTemplates = function () {
-		
-	}
+	chunk.prototype.allTemplates = function () {}
 		
 		
 		
@@ -85,10 +83,15 @@ function chunk (name, options) {
 			
 			// Set base clone object.
 			var clone_obj = {};
-			
+
 			// Loop through object and clone all object properties.
-			for (var i = 0; i < original.length; i++) {
-				var property = original[i];
+			for (var i in original) {
+				
+				// Retrieve property and value.
+				var property = i;
+				var value = original[i];
+				
+				// Ensure property is unique to original.
 				if (original.hasOwnProperty(property))
 					clone_obj[property] = clone(original[property]);
 			}
@@ -287,7 +290,7 @@ function chunk (name, options) {
 			type: this.type,
 			prefix: this.prefix
 		})
-		
+
 		// Modify duplicates properties to match the original.
 		duplicate_chunk.mods = clone(this.mods);
 		duplicate_chunk.blueprints = this.blueprints;
@@ -327,6 +330,9 @@ function chunk (name, options) {
 			
 			// Set mod value.
 			modParent[pathArray[pathArray.length - 1]] = value;
+			
+			// Notify chunk it needs to be compiled again.
+			this.isCompiled = false;
 		}
 		else {
 			var modValue = navPath(path, parent);
@@ -358,9 +364,9 @@ function chunk (name, options) {
 	*/
 	chunk.prototype.ready = function() {
 		if (!this.isCompiled)
-			this.compile();
-			
-		return dataCompiled;
+			return this.compile();
+		else
+			return this.dataCompiled;
 	}
 	
 	/**
