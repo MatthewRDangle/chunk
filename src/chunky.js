@@ -45,7 +45,10 @@ function chunk (name, options) {
 	this.dataCompiled = null;
 	
 	// Used to find parent template.
-	this.template = undefined;
+	if (options.templated && typeof options.templated === 'string')
+		this.templated = options.templated;
+	else
+		this.templated = undefined;
 }
 
 //Protect global space and separate privately accessible methods from public access.
@@ -63,7 +66,7 @@ function chunk (name, options) {
 	 * Access: Public.
 	 * Description: An object containing a record of all template chunks and it's children.
 	*/
-	chunk.prototype.allTemplates = function () {}
+	chunk.prototype.allTemplates = {}
 		
 		
 		
@@ -200,12 +203,29 @@ function chunk (name, options) {
 		return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 	}
 	
-	var templateChunk = function() {
+	/**
+	 * Method: Template Chunk.
+	 * Access: Private.
+	 * Description: Create the template chunk object.
+	 */
+	var templateStorageObj = function(template) {
 		
+		// Check for template object..
+		if (!template && template.RCID !== 'chunky')
+			throw Error('Template chunk does not exist as a parameter.');
+		
+		// Build template object.
+		var template_obj = {
+			parent: template,
+			children: []
+		}
+		
+		// Return template obj.
+		return template_obj;
 	}
 	
 	/**
-	 * Method: ValidateJSONname.
+	 * Method: Validate JSON Key.
 	 * Access: Private.
 	 * Description: Ensures the JSON property name is an acceptable.
 	 * 
@@ -363,10 +383,18 @@ function chunk (name, options) {
 	 * Description: Prepares the chunk for rendering.
 	*/
 	chunk.prototype.ready = function() {
-		if (!this.isCompiled)
-			return this.compile();
+		
+		var chunk = this;
+		
+		// Check if the chunk is templated.
+		if (this.templated)
+			chunk = this.allTemplates[this.templated].parent;
+		
+		// Compile chunk.
+		if (!chunk.isCompiled)
+			return chunk.compile();
 		else
-			return this.dataCompiled;
+			return chunk.dataCompiled;
 	}
 	
 	/**
@@ -377,32 +405,28 @@ function chunk (name, options) {
 	chunk.prototype.template = function () {
 		
 		// Create a New Chunk
-		var templated_chunk = new chunk(name, {
+		var templated_chunk = new chunk(this.name, {
 			type: this.type,
 			prefix: this.prefix,
-			template: this.name
-		})
+			templated: this.name
+		});
 		
 		// Check to see if template object already exists.
 		var templateObj = null;
 		for (var i = 0; i < this.allTemplates.length; i++) {
 			if (this.allTemplates[i].template === this.template)
 				templateObj = this.allTemplates[i].template
-		}
-		
+		};
+
 		// If it does not exist, create it.
-		if (!templateObj) {
-			templateObj = {
-				template: this,
-				children: []
-			}
-			this.allTemplates.push(templateObj);
-		}
+		if (!templateObj)
+			templateObj = templateStorageObj(this);
 
 		// Push the child into the children array.
 		templateObj.children.push(templated_chunk);
 
-		// Return templated object.
+		// Return templated object and update it all templates container.
+		this.allTemplates[this.name] = templateObj;
 		return templated_chunk;	
 	}
 })();
