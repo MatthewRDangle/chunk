@@ -1,5 +1,11 @@
 # Chunky ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-
+* [What is Chunky?](#what-is-chunky)
+* [How does it work?](#how-does-it-work)
+* [How is Chunky different?](#how-is-chunky-different)
+* [Installation](#installation)
+* [Documentation](#documentation)
+* [Getting Help](#getting-help)
+* [Versioning](#versioning)
 
 ## What is Chunky?
 A constructor object for writing reusable, readable, and reliable javascript markup. It's compatible with any javascript library or framework. 
