@@ -54,7 +54,7 @@ var Chunk = undefined;
 		}
 
 		// Return compiled data from blueprints function.
-		var output = this.blueprints(output);
+		var output = this.blueprints(this);
 		if (!output) {
 			throw Error ('No data was returned from chunk ' + this.name + ' blueprints function. Please add a return statement to return all data to be rendered.');
 		}
@@ -72,19 +72,15 @@ var Chunk = undefined;
 	 * For: Chunk
 	 * Description: Retrieve the data object.
 	 */
-	Chunk.prototype.data = function(path, create) {
+	Chunk.prototype.data = function(path, value) {
 		
 		// If path doesn't exist, error.
 		if (!path)
 			throw Error('A path must exist.');
 
 		// If Path is not of type string, error.
-		else if (typeof path === 'string')
-			throw Error('A path must be a string.')
-
-		// If create is anthing but true, set to false.
-		if (!create)
-			create = false;
+		else if (typeof path !== 'string')
+			throw Error('A path must be a string.');
 
 		// Convert path into a path array.
 		var pathArray = pathToArray(path);
@@ -92,8 +88,38 @@ var Chunk = undefined;
 		// Loop through path array to find or create data objects.
 		var data = this.dataTree;
 		for (var idx = 0; idx < pathArray.length; idx++) {
-			var name = pathArray[idx];
+
+			// Get path directory.
+			var directory = pathArray[idx];
+
+			// Get value from path.
+			if (value === undefined) {
+				data = data.getValue(directory);
+
+				// Return null if not found.
+				if (data == null)
+					return data;
+			}
+
+			// Set the value. If directory doesn't exist, create it.
+			else {
+				if (data.hasValue(directory)) {
+					if (pathArray.length - idx != idx)
+						data = data.getValue(directory);
+					else 
+						data.setValue(value);
+				}
+				else {
+					if (pathArray.length - idx != idx)
+						data.addChild(directory, 'container');
+					else
+						data.setValue(value);
+				}
+			}
 		}
+
+		if (value === undefined)
+			return data;
 	}
 
 	/**
@@ -107,26 +133,6 @@ var Chunk = undefined;
 
 		// Push blueprints into the chunk.
 		this.blueprints = blueprints;
-	}
-
-	/**
-	 * Function: Path To Array.
-	 * Access: Private
-	 * Type: Method
-	 * For: Chunk
-	 * Description: Converts a string path into an array by seperating each data point with a '/'. Ex: fee/foo/fum
-	 */
-	var pathToArray = function(path) {
-		
-		// Ensure path is a string value.
-		if (!path || typeof path !== 'string')
-			throw Error('A path must be of type String.');
-		
-		// Parse the Path into an array.
-		var array = path.split('/');
-
-		// Return the array in sequential order.
-		return array;
 	}
 
 	/**
@@ -150,21 +156,91 @@ var Chunk = undefined;
 	 * Access: Public
 	 * Type: Constructor
 	 * For: This
-	 * Description: A chunks variable object for parameter control.
+	 * Description: ...
 	 */
 	var Data = function(name, type) {
 		
 		// House the mod name for reference.
-		this.name = name;
+		if (typeof name !== 'string')
+			throw Error ('The typeof name is required to be a string value.');
+		else	
+			this.name = name;
 
-		// Data type.
-		this.type = type;
+		// House the type of object for reference.
+		if (typeof type !== 'string')
+			throw Error ('The typeof type is required to be a string value.');
+		else if (type === 'variable' || type === 'container')
+			this.type = type;
+		else
+			throw Error ('The type must either be variable or container.');
 
 		// Logic for mod location inside of the mod tree.
-		this.path = '';
+		this.path = undefined;
 
 		// The mod value for this function.
-		this.value = '';
+		if (type === 'container')
+			this.value = {};
+		else
+			this.value = undefined;
+	}
+
+	Data.prototype.addChild = function(name, type) {
+		if (this.type !== 'container')
+			this.convertToContainer();
+
+		if(this.value.hasOwnProperty(name))
+			return null;
+		else if (type === 'variable' || type === 'container')
+			this.value[name] = new Data(name, type);
+		else
+			this.value[name] = new Data(name, 'variable');
+	}
+
+	Data.prototype.convertToContainer = function() {
+		this.type = 'container';
+		this.value = {};
+	}
+
+	Data.prototype.convertToVariable = function() {
+		this.type = 'variable';
+		this.value = undefined;
+	}
+
+	Data.prototype.getValue = function(subValue) {
+		if (typeof subValue === 'string') {
+			if (this.value.hasOwnProperty(subValue))
+				return this.value[subValue];
+			else
+				return null;
+		}	
+		else
+			return this.value;
+	}
+	
+	Data.prototype.hasValue = function(value) {
+		if (!value)
+			return null;
+
+		else if (this.type === 'container')
+			return this.value.hasOwnProperty(value);
+
+		else {
+			if (this.value === value)
+				return true;
+			else
+				return false;
+		}
+	}
+
+	Data.prototype.setValue = function(value) {
+		if (!value)
+			throw Error ('A value must be passed through to set it to data object ' + this.path);
+
+		else if (this.type === 'variable')
+			this.value = value;
+		
+		else
+			throw Error ("Can't set the value of a container data object for " + this.path);
 	}
 
 	/**
@@ -181,6 +257,26 @@ var Chunk = undefined;
 
 		// A container to hold reference to the object which it describes.
 		this.for = '';
+	}
+
+	/**
+	 * Function: Path To Array.
+	 * Access: Private
+	 * Type: Method
+	 * For: None
+	 * Description: Converts a string path into an array by seperating each data point with a '/'. Ex: fee/foo/fum
+	 */
+	var pathToArray = function(path) {
+		
+		// Ensure path is a string value.
+		if (!path || typeof path !== 'string')
+			throw Error('A path must be of type String.');
+		
+		// Parse the Path into an array.
+		var array = path.split('/');
+
+		// Return the array in sequential order.
+		return array;
 	}
 
 }())
