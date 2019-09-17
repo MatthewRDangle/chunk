@@ -4,73 +4,174 @@
 // Chunky
 //====================================================================
 
-/**
- * Constructor: Chunk
- * 
- * @param name string - A unique name for this chunk describing it's most basic function. (ex. Card, Button, Linger, preview, tile, libraryItem).
- * @param options.type string - default is 'component' (web component). Write to this if needed, to better describe your component (ex. structure, container, global).
- * @param options.prefix string - default is 'chunk'. This is the first class to be added to the class name of this component.
-*/
-function chunk (name, options) {
-	
-	// Does options exist. 
-	if (!options)
-		options = {};
-
-	// Validate and Assign Name for Chunk.
-	if (!name || typeof name !== 'string')
-		throw Error('A chunk must be given a name.');
-	this.name = name;
-
-	// Assign default ClassName prefix if none exists.
-	if (!options.prefix)
-		this.prefix = 'chunk';
-	else
-		this.prefix = options.prefix;
-
-	// Validate and Assign Type for Chunk.
-	if (!options.type || typeof options.type !== 'string' )
-		this.type = 'component'; // Default Value for Chunk.
-	else
-		this.type = options.type;
-	
-	// Create a modification tree.
-	this.mods = {};
-	
-	// Create place holder for build controls.
-	this.blueprints = null;
-	
-	// Compiled data and validation.
-	this.isCompiled = false;
-	this.dataCompiled = null;
-	
-	// Used to find parent template.
-	if (options.templated && typeof options.templated === 'string')
-		this.templated = options.templated;
-	else
-		this.templated = undefined;
-}
+// Placeholder.
+var Chunk = undefined;
 
 //Protect global space and separate privately accessible methods from public access.
-(function(){
-	
+(function() {
+
 	/**
-	 * Key: Parse Path.
-	 * Access: Public.
-	 * Description: Repository Component Identification: Used for internal reference and validation.
-	*/ 
-	chunk.prototype.RCID = 'chunky'; // This should never change.
-	
+	 * Function: Chunk
+	 * Access: Public
+	 * Type: Constructor
+	 * For: This
+	 * Description: The main constructor object to create a modulized source of HTML.
+	 * 
+	 * Param: name : string : required : A unique name for this chunk describing it's most basic function. (ex. Card, Button, Linger, preview, tile, libraryItem).
+	 */ 
+	Chunk = function(name) {
+
+		// Validate and Assign Name for Chunk.
+		if (!name || typeof name !== 'string')
+			throw Error('A chunk must be given a name.');
+		this.name = name;
+
+		// Container object to hold the blue instructions of the chunk.
+		this.blueprints = null;
+
+		// A boolean to indicate whether the latest blueprints code has been executed and placed into the output.
+		this.compiled = false;
+
+		// Container tree to hold all data.
+		this.dataTree = new Data('d', 'container');
+
+		// The output variable to hold the executed blueprints code.
+		this.output = null;
+	}
+
 	/**
-	 * Key: allTemplates.
-	 * Access: Public.
-	 * Description: An object containing a record of all template chunks and it's children.
-	*/
-	chunk.prototype.allTemplates = {}
+	 * Function: Compile
+	 * Access: Public
+	 * Type: Method
+	 * For: Chunk
+	 * Description: Executes the blueprints function and returns the compiled code into the output storage variable.
+	 */
+	Chunk.prototype.compile = function() {
 		
+		// Check to see if blueprints is a function.
+		if (typeof this.blueprints !== 'function') {
+			throw Error('There are no blueprints for ' + this.name);
+		}
+
+		// Return compiled data from blueprints function.
+		var output = this.blueprints(this);
+		if (!output) {
+			throw Error ('No data was returned from chunk ' + this.name + ' blueprints function. Please add a return statement to return all data to be rendered.');
+		}
+		else {
+			this.output = output;
+			this.compiled = true;
+			return this.output;
+		}
+	}
+
+	/**
+	 * Function: Data
+	 * Access: Public
+	 * Type: Method
+	 * For: Chunk
+	 * Description: Retrieve the data object.
+	 */
+	Chunk.prototype.data = function(path, value) {
 		
+		// If path doesn't exist, error.
+		if (!path)
+			throw Error('A path must exist.');
+
+		// If Path is not of type string, error.
+		else if (typeof path !== 'string')
+			throw Error('A path must be a string.');
+
+		// Convert path into a path array.
+		var pathArray = pathToArray(path);
+
+		// Loop through path array to find or create data objects.
+		var data = this.dataTree;
+		for (var idx = 0; idx < pathArray.length; idx++) {
+
+			// Get path directory.
+			var directory = pathArray[idx];
+
+			// Get value from path.
+			if (value === undefined) {
+				data = data.getValue(directory);
+
+				// Return null if not found.
+				if (data == null)
+					return data;
+				else if (pathArray.length - 1 == idx)
+					return data.getValue();
+			}
+			
+			// Set the value. If directory doesn't exist, create it.
+			else {
+				if (data.hasValue(directory)) {
+					data = data.getValue(directory);
+					if (pathArray.length - 1 == idx)
+						data.setValue(value);
+				}
+				else {
+					if (pathArray.length - 1 != idx)
+						data = data.addChild(directory, 'container');
+					else {
+						var child = data.addChild(directory, 'variable');
+						child.setValue(value);
+					}
+				}
+			}
+		}
+
+		if (value === undefined)
+			return data;
+	}
+
+	Chunk.prototype.duplicate = function(name) {
+
+		//Create a New Chunk
+		var duplicate_chunk = new Chunk(name, {
+			type: this.type,
+			prefix: this.prefix
+		})
+
+		// Modify duplicates properties to match the original.
+		duplicate_chunk.dataTree = clone(this.dataTree);
+		duplicate_chunk.blueprints = this.blueprints;
+		if (this.compiled)
+			duplicate_chunk.compile();
+
+		// Return duplicate
+		return duplicate_chunk;
+	}
+
+	/**
+	 * Function: Instruct
+	 * Access: Public
+	 * Type: Method
+	 * For: Chunk
+	 * Description: Enables the user to add build instructions, known as blueprints, to the chunk object for compilation.
+	 */
+	Chunk.prototype.instruct = function(blueprints) {
+
+		// Push blueprints into the chunk.
+		this.blueprints = blueprints;
+	}
+
+	/**
+	 * Function: Ready
+	 * Access: Public
+	 * Type: Method
+	 * For: Chunk
+	 * Description: Ensures the output is up to date before returning it.
+	 */
+	Chunk.prototype.ready = function() {
 		
-		
+		// Compile chunk.
+		if (!this.compiled)
+			return this.compile();
+		else
+			return this.output;
+	}
+
 				
 	/**
 	 * Method: Clone Object.
@@ -80,7 +181,7 @@ function chunk (name, options) {
 	 * @param original anything - [Required] - The thing which to copy.
 	 */
 	var clone = function(original) {
-		
+
 		// If the clone is an object, clone this way...
 		if (typeof original === 'object') {
 			
@@ -98,7 +199,10 @@ function chunk (name, options) {
 				if (original.hasOwnProperty(property))
 					clone_obj[property] = clone(original[property]);
 			}
-			
+
+			// Copy prototype function
+			clone_obj.__proto__ = original.__proto__;
+
 			// Returned cloned object.
 			return clone_obj;
 		}
@@ -122,58 +226,125 @@ function chunk (name, options) {
 		else
 			return original;
 	}
-		
+
 	/**
-	 * Method: Nav Path.
-	 * Access: Private.
-	 * Description: Navigates through an objects properties to a specific location.
-	 * 
-	 * @param path string - The string path using backslash "/" to the mod property.
-	 * @param obj obj - The object to navigate.
-	 * @param setPath boolean - Whether or not the path should be set along the way: True or False.
-	 * @return value variable - The property value of the object after looping through it.
+	 * Function: Data
+	 * Access: Public
+	 * Type: Constructor
+	 * For: This
+	 * Description: ...
 	 */
-	var navPath = function(path, obj, setPath) {
-		//Set the base of the obj as parent for initial loop.
-		var parent = obj;
+	var Data = function(name, type) {
 		
-		// Convert path to an array for loop.
-		var pathArray = [];
-		if (typeof path !== 'object')
-			pathArray = parsePath(path);
+		// House the mod name for reference.
+		if (typeof name !== 'string')
+			throw Error ('The typeof name is required to be a string value.');
+		else	
+			this.name = name;
+
+		// House the type of object for reference.
+		if (typeof type !== 'string')
+			throw Error ('The typeof type is required to be a string value.');
+		else if (type === 'variable' || type === 'container')
+			this.type = type;
 		else
-			pathArray = path;
+			throw Error ('The type must either be variable or container.');
 
-		// Loop through the object based on the path.
-		for (var i in pathArray) {
+		// Logic for mod location inside of the mod tree.
+		this.path = undefined;
 
-			// If property does not exist return null or create a container placeholder.
-			if (!parent.hasOwnProperty(pathArray[i])) {
-				if (setPath) {
-					parent[pathArray[i]] = {};
-				}
-				else {
-					return null	
-				}
-			}
-			
-			// Change parent
-			parent = parent[pathArray[i]];
-		}
-		
-		// return the found obj property value.
-		return parent;
+		// The mod value for this function.
+		if (type === 'container')
+			this.value = {};
+		else
+			this.value = undefined;
+	}
+
+	Data.prototype.addChild = function(name, type) {
+		if (this.type !== 'container')
+			this.convertToContainer();
+
+		if(this.value.hasOwnProperty(name))
+			return null;
+		else if (type === 'variable' || type === 'container')
+			this.value[name] = new Data(name, type);
+		else
+			this.value[name] = new Data(name, 'variable');
+
+		return this.value[name];
+	}
+
+	Data.prototype.convertToContainer = function() {
+		this.type = 'container';
+		this.value = {};
+	}
+
+	Data.prototype.convertToVariable = function() {
+		this.type = 'variable';
+		this.value = undefined;
+	}
+
+	Data.prototype.getValue = function(subValue) {
+		if (typeof subValue === 'string') {
+			if (this.value.hasOwnProperty(subValue))
+				return this.value[subValue];
+			else
+				return null;
+		}	
+		else
+			return this.value;
 	}
 	
+	Data.prototype.hasValue = function(value) {
+		if (!value)
+			return null;
+
+		else if (this.type === 'container')
+			return this.value.hasOwnProperty(value);
+
+		else {
+			if (this.value === value)
+				return true;
+			else
+				return false;
+		}
+	}
+
+	Data.prototype.setValue = function(value) {
+		if (!value)
+			throw Error ('A value must be passed through to set it to data object ' + this.path);
+
+		else if (this.type === 'variable')
+			this.value = value;
+		
+		else
+			throw Error ("Can't set the value of a container data object for " + this.path);
+	}
+
 	/**
-	 * Method: Parse Path.
-	 * Access: Private.
-	 * Description: Search the string for path names separated by a slash (ex. /) and returns and returns an array with the path name in order.
-	 * 
-	 * @param path string - The string path with names separated with a slash (ex. /).
-	 * @return path array[string] - The sequential order of path names as strings.
+	 * Function: Doc
+	 * Access: Public
+	 * Type: Constructor
+	 * For: This
+	 * Description: ...
 	 */
-	var parsePath = function(path) {
+	var Doc = function() {
+		
+		// A general description or purpose of the object.
+		this.info = '';
+
+		// A container to hold reference to the object which it describes.
+		this.for = '';
+	}
+
+	/**
+	 * Function: Path To Array.
+	 * Access: Private
+	 * Type: Method
+	 * For: None
+	 * Description: Converts a string path into an array by seperating each data point with a '/'. Ex: fee/foo/fum
+	 */
+	var pathToArray = function(path) {
 		
 		// Ensure path is a string value.
 		if (!path || typeof path !== 'string')
@@ -185,248 +356,5 @@ function chunk (name, options) {
 		// Return the array in sequential order.
 		return array;
 	}
-	
-	/**
-	 * Method: Parse HTML Special Characters.
-	 * Access Private.
-	 * Description: Convert special characters into an HTML Entity.
-	 * 
-	 * @param string string - The string which to convert.
-	 */
-	var parseHTMLSpChr = function(string) {
-		
-		// Check for string.
-		if (!string || typeof string !== 'string')
-			throw Error('In order to convert, their must be a string parameter of type string.');
-		
-		// Return with cnoverted special characters.
-		return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-	}
-	
-	/**
-	 * Method: Template Chunk.
-	 * Access: Private.
-	 * Description: Create the template chunk object.
-	 */
-	var templateStorageObj = function(template) {
-		
-		// Check for template object..
-		if (!template && template.RCID !== 'chunky')
-			throw Error('Template chunk does not exist as a parameter.');
-		
-		// Build template object.
-		var template_obj = {
-			parent: template,
-			children: []
-		}
-		
-		// Return template obj.
-		return template_obj;
-	}
-	
-	/**
-	 * Method: Validate JSON Key.
-	 * Access: Private.
-	 * Description: Ensures the JSON property name is an acceptable.
-	 * 
-	 * @param string string - The string value to check if it's capable of being a JSON key without errors.
-	 * @return validation boolean - A true or false value indicating if the string passed. True is valid, false is invalid.
-	 */
-	var validateJSONkey = function(string) {
-		
-		// Ensure path is a string value.
-		if (!string || typeof string !== 'string')
-			throw Error('The parameter must be of type string.');
-		
-		// Set Invalid Array
-		var invalid = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '$', '%', '-', '+', '"', "'", '^', '#']
-		
-		// If any invalid characters are found, return false, other return true;
-		for (var i in invalid) {
-			var validate = invalid[i];
-			
-			if (string.indexOf(validate) >= 0)
-				return false;
-			else
-				return true;
-		}
-	}
-	
-	
-	
-	
-	
-	/**
-	 * Method: Build
-	 * Access: Public.
-	 * Description: Enables the user to construct build logic for it's chunk.
-	 * 
-	 * @param func function - [Required] - Build logic function.
-	*/
-	chunk.prototype.build = function(func) {
-		
-		// Push to main object.
-		this.isCompiled = false;
-		this.blueprints = func;
-	}
-	
-	/** 
-	 * Method: Compile
-	 * Access: Public.
-	 * Description: Run the blueprints function and convert the data into the chunk logic properties.
-	*/
-	chunk.prototype.compile = function(chunk) {
-		
-		// If chunk parameter doesn't exist, assume this chunk.
-		if (!chunk || !chunk.type)
-			chunk = this;
-			
-		// Check to see if blueprints is set up correctly.
-		if (typeof chunk.blueprints !== 'function') {
-			throw Error('There are no blueprints for ' + chunk.prefix + ' ' + chunk.name);
-		}
 
-		// Return compiled data from blueprints function.
-		var dataCompiled =  chunk.blueprints(chunk);
-		if (!dataCompiled) {
-			throw Error ('No data was returned from chunk ' + chunk.name + ' blueprints function. Please add a return statement to return all data to be rendered.');
-		}
-		else {
-			this.dataCompiled = dataCompiled;
-			this.isCompiled = true;
-			return this.dataCompiled;
-		}
-	}
-	
-	/** 
-	 * Method: Duplicate
-	 * Access: Public.
-	 * Description: Creates an exact copy of this chunk and returns it as a new object.
-	*/
-	chunk.prototype.duplicate = function(name) {
-		
-		//Create a New Chunk
-		var duplicate_chunk = new chunk(name, {
-			type: this.type,
-			prefix: this.prefix
-		})
-
-		// Modify duplicates properties to match the original.
-		duplicate_chunk.mods = clone(this.mods);
-		duplicate_chunk.blueprints = this.blueprints;
-		if (this.isCompiled)
-			duplicate_chunk.compile();
-
-		// Return duplicate
-		return duplicate_chunk;
-	}
-	
-	/**
-	 * Method: Mod
-	 * Access: Public.
-	 * Description: Modifies or retrieves a mod from the mods object.
-	 * 
-	 * @param path string - [Required] - The string path using backslash "/" to the mod property.
-	 * @param value string - [Optional]- To set the mods value.
-	*/
-	chunk.prototype.mod = function(path, value) {
-
-		// Check to see if path exists.
-		if (!path || typeof path !== 'string')
-			throw Error('The path to the mod is required as the first parameter.');
-		
-		// Turn the path into an array and retrieve the mods object as the parent.
-		var parent = this.mods;
-
-		// Navigate to the mods' container and retrieve the mod value or set it's value.
-		if (value) {
-			// Convert string path to array.
-			var pathArray = parsePath(path);
-			
-			// navigate to mods parent container.
-			var modPath = parsePath(path);
-			modPath.pop();
-			var modParent = navPath(modPath, parent, true);
-			
-			// Set mod value.
-			modParent[pathArray[pathArray.length - 1]] = value;
-			
-			// Notify chunk it needs to be compiled again.
-			this.isCompiled = false;
-		}
-		else {
-			var modValue = navPath(path, parent);
-			if (modValue)
-				return modValue	;
-			else
-				return '';
-		}
-	}
-
-		
-	/** 
-	 * Method: Print.
-	 * Access: Public.
-	 * Description: Compile the chunk into legible HTML text.
-	 * 
-	 * @param string string - [Required] - A string of HTML which to parse into legible HTML text.
-	*/
-	chunk.prototype.print = function(string) {
-		
-		// Parse string then print.
-		return parseHTMLSpChr(string);
-	}
-	
-	/** 
-	 * Method: Ready.
-	 * Access: Public.
-	 * Description: Prepares the chunk for rendering.
-	*/
-	chunk.prototype.ready = function() {
-		
-		var chunk = this;
-		
-		// Check if the chunk is templated.
-		if (this.templated)
-			chunk = this.allTemplates[this.templated].parent;
-		
-		// Compile chunk.
-		if (!chunk.isCompiled)
-			return chunk.compile();
-		else
-			return chunk.dataCompiled;
-	}
-	
-	/**
-	 * Method: Template.
-	 * Access: Public.
-	 * Description: Creates a references chunk for everything except mods. Mods are unique to a chunk.
-	*/
-	chunk.prototype.template = function () {
-		
-		// Create a New Chunk
-		var templated_chunk = new chunk(this.name, {
-			type: this.type,
-			prefix: this.prefix,
-			templated: this.name
-		});
-		
-		// Check to see if template object already exists.
-		var templateObj = null;
-		for (var i = 0; i < this.allTemplates.length; i++) {
-			if (this.allTemplates[i].template === this.template)
-				templateObj = this.allTemplates[i].template
-		};
-
-		// If it does not exist, create it.
-		if (!templateObj)
-			templateObj = templateStorageObj(this);
-
-		// Push the child into the children array.
-		templateObj.children.push(templated_chunk);
-
-		// Return templated object and update it all templates container.
-		this.allTemplates[this.name] = templateObj;
-		return templated_chunk;	
-	}
-})();
+}())

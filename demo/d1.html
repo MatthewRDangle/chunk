@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> Demo 1 </title>
+<script src="../src/chunky.js"></script>
+</head>
+
+<body>
+	<div id="root">
+		<!-- Render All Content Here. -->
+	</div>
+	
+	<script>
+
+		/*
+		Demo 1. 
+		* Lets create a container of modular markup. (Called Chunk).
+		* Use .data(name) method so data can be injected later.
+		*/
+
+		(function() {
+
+			// Create Demo Chunk.
+			var demo = new Chunk('demo');
+			demo.instruct(function(chunk){
+
+				// Create header element.
+				var header = document.createElement('h1');
+				header.classList.add('demo_header');
+				header.innerHTML = chunk.data('title'); //Create data variable where data may be inserted into for the title.
+
+				// Create subheader element.
+				var subheader = document.createElement('span');
+				subheader.classList.add('demo_header');
+				subheader.innerHTML = chunk.data('subtitle'); //Create data variable where data may be inserted into for the subtitle.
+
+				// Create an element to contain everything for the build.
+				var element = document.createElement('div');
+				element.classList.add('demo');
+				element.appendChild(header);
+				element.appendChild(subheader);
+
+				// Return build.
+				return element;
+			})
+
+			/*
+			Demo 1. 
+			* Inject the content into data point using .data(name, value) method.
+			*/
+
+			// Inject data into the demo Chunk.
+			demo.data('title', 'Hello World');
+			demo.data('subtitle', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+
+			/*
+			Demo 1. 
+			* Render content onto the screen where element id = root.
+			*/
+
+			// Add Content To Root.
+			var root = document.getElementById('root');
+			root.appendChild(demo.ready());
+		}());
+	</script>
+</body>
+
+</html>
