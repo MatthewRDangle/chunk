@@ -84,7 +84,7 @@ var Chunk = undefined;
 
 		// Convert path into a path array.
 		var pathArray = pathToArray(path);
-		
+
 		// Loop through path array to find or create data objects.
 		var data = this.dataTree;
 		for (var idx = 0; idx < pathArray.length; idx++) {
@@ -99,6 +99,8 @@ var Chunk = undefined;
 				// Return null if not found.
 				if (data == null)
 					return data;
+				else if (pathArray.length - 1 == idx)
+					return data.getValue();
 			}
 
 			// Set the value. If directory doesn't exist, create it.
@@ -110,10 +112,12 @@ var Chunk = undefined;
 						data.setValue(value);
 				}
 				else {
-					if (pathArray.length - idx != idx)
-						data.addChild(directory, 'container');
-					else
-						data.setValue(value);
+					if (pathArray.length - 1 != idx)
+						data = data.addChild(directory, 'container');
+					else {
+						var child = data.addChild(directory, 'variable');
+						child.setValue(value);
+					}
 				}
 			}
 		}
@@ -194,6 +198,8 @@ var Chunk = undefined;
 			this.value[name] = new Data(name, type);
 		else
 			this.value[name] = new Data(name, 'variable');
+
+		return this.value[name];
 	}
 
 	Data.prototype.convertToContainer = function() {
