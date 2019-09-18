@@ -37,6 +37,9 @@ var Chunk = undefined;
 
 		// The output variable to hold the executed blueprints code.
 		this.output = null;
+
+		// Documentation container.
+		this.doc = new Doc();
 	}
 
 	/**
@@ -141,6 +144,37 @@ var Chunk = undefined;
 
 		// Return duplicate
 		return duplicate_chunk;
+	}
+
+	Chunk.prototype.info = function(path, key, stringValue) {
+		
+		// Check to see if path is a string.
+		if (typeof path !== 'string')
+			throw Error('The path must be a string.');
+
+		// Check to see if path is a string.
+		if (typeof path !== 'key')
+			throw Error('The key must be a string.');
+
+		// Use generic "/" to update or get the chunk documentation.
+		if (path.substring(0, 1) == 'this') {
+
+			if (typeof stringValue === 'string') {
+				this.doc.info(key, stringValue);
+			}	
+			else
+				return this.doc.info(key);
+		}
+
+		// Update or get the data documentation.
+		else {
+			var data = this.data(path);
+			if (typeof stringValue === 'string') {
+				data.doc.info(key, stringValue);
+			}	
+			else
+				return data.doc.info(key);
+		}
 	}
 
 	/**
@@ -258,6 +292,9 @@ var Chunk = undefined;
 			this.value = {};
 		else
 			this.value = undefined;
+		
+		// Documentation Container.
+		this.doc = new Doc();
 	}
 
 	Data.prototype.addChild = function(name, type) {
@@ -328,13 +365,35 @@ var Chunk = undefined;
 	 * For: This
 	 * Description: ...
 	 */
-	var Doc = function() {
-		
-		// A general description or purpose of the object.
-		this.info = '';
-
+	var Doc = function(path) {
 		// A container to hold reference to the object which it describes.
-		this.for = '';
+		if (path && typeof path === 'string')
+			this.for = path;
+		else
+			throw Error('The path to the parent is required');
+	}
+
+	Doc.prototype.info = function(name, stringValue) {
+		
+		// Throw Errors for invalid use.
+		if (!name)
+			throw Error('A name and a string value are required.');
+
+		else if (name === 'string')
+			throw Error ('A name must be of type string.');
+			
+		else if (name === 'info' || name === 'for')
+			throw Error('The name parameter can not be "info" or "for".');
+
+		//If stringValue exists, set the value for the doc. Otherwise return the value with the same name.
+		if (typeof stringValue === 'string') {
+			this[name] = stringValue;
+		}	
+		else if (this.hasOwnProperty(name)) {
+			return this[name];
+		}
+		else
+			return null;
 	}
 
 	/**
