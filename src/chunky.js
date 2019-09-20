@@ -39,7 +39,7 @@ var Chunk = undefined;
 		this.output = null;
 
 		// Documentation container.
-		this.doc = new Doc();
+		this.doc = new Doc('this');
 	}
 
 	/**
@@ -268,13 +268,20 @@ var Chunk = undefined;
 	 * For: This
 	 * Description: ...
 	 */
-	var Data = function(name, type) {
-		
-		// House the mod name for reference.
-		if (typeof name !== 'string')
+	var Data = function(path, type) {
+
+		// Data reference information.
+		if (typeof path !== 'string')
 			throw Error ('The typeof name is required to be a string value.');
-		else	
-			this.name = name;
+		else {
+			
+			// Set the name.
+			var pathArray = pathToArray(path);
+			this.name = pathArray[pathArray.length - 1];
+
+			// Set the path.
+			this.path = path;
+		}
 
 		// House the type of object for reference.
 		if (typeof type !== 'string')
@@ -284,9 +291,6 @@ var Chunk = undefined;
 		else
 			throw Error ('The type must either be variable or container.');
 
-		// Logic for mod location inside of the mod tree.
-		this.path = undefined;
-
 		// The mod value for this function.
 		if (type === 'container')
 			this.value = {};
@@ -294,7 +298,7 @@ var Chunk = undefined;
 			this.value = undefined;
 		
 		// Documentation Container.
-		this.doc = new Doc();
+		this.doc = new Doc(path);
 	}
 
 	Data.prototype.addChild = function(name, type) {
@@ -304,9 +308,9 @@ var Chunk = undefined;
 		if(this.value.hasOwnProperty(name))
 			return null;
 		else if (type === 'variable' || type === 'container')
-			this.value[name] = new Data(name, type);
+			this.value[name] = new Data(this.path + '/' + name, type);
 		else
-			this.value[name] = new Data(name, 'variable');
+			this.value[name] = new Data(this.path + '/' + name, 'variable');
 
 		return this.value[name];
 	}
@@ -366,6 +370,7 @@ var Chunk = undefined;
 	 * Description: ...
 	 */
 	var Doc = function(path) {
+
 		// A container to hold reference to the object which it describes.
 		if (path && typeof path === 'string')
 			this.for = path;
