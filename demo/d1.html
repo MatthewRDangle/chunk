@@ -28,12 +28,12 @@
 				// Create header element.
 				var header = document.createElement('h1');
 				header.classList.add('demo_header');
-				header.innerHTML = chunk.data('title'); //Create data variable where data may be inserted into for the title.
+				header.innerHTML = chunk.data('title').getValue(); //Create data variable where data may be inserted into for the title.
 
 				// Create subheader element.
 				var subheader = document.createElement('span');
 				subheader.classList.add('demo_header');
-				subheader.innerHTML = chunk.data('subtitle'); //Create data variable where data may be inserted into for the subtitle.
+				subheader.innerHTML = chunk.data('subtitle').getValue(); //Create data variable where data may be inserted into for the subtitle.
 
 				// Create an element to contain everything for the build.
 				var element = document.createElement('div');

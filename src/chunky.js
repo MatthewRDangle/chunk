@@ -95,15 +95,10 @@ var Chunk = undefined;
 			// Get path directory.
 			var directory = pathArray[idx];
 
-			// Get value from path.
+			// Get data object from path.
 			if (value === undefined) {
 				data = data.getValue(directory);
-
-				// Return null if not found.
-				if (data == null)
-					return data;
-				else if (pathArray.length - 1 == idx)
-					return data.getValue();
+				return data;
 			}
 			
 			// Set the value. If directory doesn't exist, create it.
@@ -129,7 +124,7 @@ var Chunk = undefined;
 	}
 
 	Chunk.prototype.duplicate = function(name) {
-
+		
 		//Create a New Chunk
 		var duplicate_chunk = new Chunk(name, {
 			type: this.type,
@@ -144,37 +139,6 @@ var Chunk = undefined;
 
 		// Return duplicate
 		return duplicate_chunk;
-	}
-
-	Chunk.prototype.info = function(path, key, stringValue) {
-		
-		// Check to see if path is a string.
-		if (typeof path !== 'string')
-			throw Error('The path must be a string.');
-
-		// Check to see if path is a string.
-		if (typeof path !== 'key')
-			throw Error('The key must be a string.');
-
-		// Use generic "/" to update or get the chunk documentation.
-		if (path.substring(0, 1) == 'this') {
-
-			if (typeof stringValue === 'string') {
-				this.doc.info(key, stringValue);
-			}	
-			else
-				return this.doc.info(key);
-		}
-
-		// Update or get the data documentation.
-		else {
-			var data = this.data(path);
-			if (typeof stringValue === 'string') {
-				data.doc.info(key, stringValue);
-			}	
-			else
-				return data.doc.info(key);
-		}
 	}
 
 	/**
