@@ -10,7 +10,7 @@
 ## What is Chunky?
 A constructor object for writing reusable, readable, and reliable JavaScript markup. It's compatible with any javascript library or framework. 
 
-Chunky was built to support all modern browsers, from IE 11 onward, Chrome, Safari, Firefox and Edge. No polyfills required. fire 
+Chunky was built to support all modern browsers, from IE 11 onward, Chrome, Safari, Firefox and Edge. No polyfills required. :fire: 
 
 
 ## How does it work?
