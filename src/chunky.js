@@ -17,7 +17,7 @@ var Chunk = undefined;
 	 * For: This
 	 * Description: The main constructor object to create a modulized source of HTML.
 	 * 
-	 * Param: name : string : required : A unique name for this chunk describing it's most basic function. (ex. Card, Button, Linger, preview, tile, libraryItem).
+	 * @param: name : string : required : A unique name for this chunk describing it's most basic function. (ex. Card, Button, Linger, preview, tile, libraryItem).
 	 */ 
 	Chunk = function(name) {
 
@@ -74,6 +74,11 @@ var Chunk = undefined;
 	 * Type: Method
 	 * For: Chunk
 	 * Description: Retrieve the data object.
+	 * 
+	 * @param: path : string : required : The path to the data object found in the chunk. Use "/" to path to the data variable. 
+	 * @param: value : string : optional : Associate a value with the data variable.
+	 * 
+	 * @return: data : object : always : The data variable.
 	 */
 	Chunk.prototype.data = function(path, value) {
 		
@@ -123,6 +128,17 @@ var Chunk = undefined;
 			return data;
 	}
 
+	/**
+	 * Function: Data
+	 * Access: Public
+	 * Type: Method
+	 * For: Chunk
+	 * Description: Retrieve the data object.
+	 * 
+	 * @param: name : string : required : A name for this chunk.
+	 * 
+	 * @return: chunk : object : always : A duplicate chunk object, unique without reference.
+	 */
 	Chunk.prototype.duplicate = function(name) {
 		
 		//Create a New Chunk
@@ -146,7 +162,9 @@ var Chunk = undefined;
 	 * Access: Public
 	 * Type: Method
 	 * For: Chunk
-	 * Description: Enables the user to add build instructions, known as blueprints, to the chunk object for compilation.
+	 * Description: Enables the user to add build instructions, known as blueprints, to the chunk object for compilation. 
+	 * 
+	 * @param: blueprints : function : required : A function containing build instructions for rendering.
 	 */
 	Chunk.prototype.instruct = function(blueprints) {
 
@@ -160,6 +178,8 @@ var Chunk = undefined;
 	 * Type: Method
 	 * For: Chunk
 	 * Description: Ensures the output is up to date before returning it.
+	 * 
+	 * @return: Output : n/a : always : Returns whatever is returned by blueprint function. This is stored in output.
 	 */
 	Chunk.prototype.ready = function() {
 		
@@ -172,11 +192,15 @@ var Chunk = undefined;
 
 				
 	/**
-	 * Method: Clone Object.
+	 * Function: Clone.
 	 * Access: Private.
+	 * Type: Function
+	 * For: Clone.
 	 * Description: Copy all object properties and values without reference.
 	 * 
 	 * @param original anything - [Required] - The thing which to copy.
+	 * 
+	 * @return: clone : n/a : always : Returns a deep copy of whatever is passed through. Unique, no references.
 	 */
 	var clone = function(original) {
 
@@ -229,8 +253,13 @@ var Chunk = undefined;
 	 * Function: Data
 	 * Access: Public
 	 * Type: Constructor
-	 * For: This
-	 * Description: ...
+	 * For: Data
+	 * Description: A container to house internal chunk variables.
+	 * 
+	 * @param: path : string : required : The location the object is stored inside the data tree.
+	 * @param: type : string : required : The type of data object. Can be either "container" or "variable".
+	 * 
+	 * @return: Data : object : always : The data variable object.
 	 */
 	var Data = function(path, type) {
 
@@ -265,6 +294,18 @@ var Chunk = undefined;
 		this.doc = new Doc(path);
 	}
 
+	/**
+	 * Function: Add Child
+	 * Access: Public
+	 * Type: Method
+	 * For: Data
+	 * Description: Appends a data variable as a child. Converts this data variable to a container if not already.
+	 * 
+	 * @param: name : string : required : The name of the child data variable.
+	 * @param: type : string : required : The type of data object. Can be either "container" or "variable".
+	 * 
+	 * @return: Data : object : always : The data variable object.
+	 */
 	Data.prototype.addChild = function(name, type) {
 		if (this.type !== 'container')
 			this.convertToContainer();
@@ -279,16 +320,41 @@ var Chunk = undefined;
 		return this.value[name];
 	}
 
+	/**
+	 * Function: Convert to Container
+	 * Access: Public
+	 * Type: Method
+	 * For: Data
+	 * Description: Converts the data variable to a container type. Will erase the data associated with variable type.
+	 */
 	Data.prototype.convertToContainer = function() {
 		this.type = 'container';
 		this.value = {};
 	}
 
+	/**
+	 * Function: Convert to Variable
+	 * Access: Public
+	 * Type: Method
+	 * For: Data
+	 * Description: Converts the data variable to a variable type. Will erase the data associated with container type.
+	 */
 	Data.prototype.convertToVariable = function() {
 		this.type = 'variable';
 		this.value = undefined;
 	}
 
+	/**
+	 * Function: Get Value
+	 * Access: Public
+	 * Type: Method
+	 * For: Data
+	 * Description: Retrieves the value of the Data variable.
+	 * 
+	 * @param: subValue : string : optional : If the data variable is a "container", use this to retrieve a child.
+	 * 
+	 * @return: n/a : n/a : always : What ever is stored as the "value" of this data variable.
+	 */
 	Data.prototype.getValue = function(subValue) {
 		if (typeof subValue === 'string') {
 			if (this.value.hasOwnProperty(subValue))
@@ -300,6 +366,17 @@ var Chunk = undefined;
 			return this.value;
 	}
 	
+	/**
+	 * Function: Has Value
+	 * Access: Public
+	 * Type: Method
+	 * For: Data
+	 * Description: Retrieves the value of the Data variable.
+	 * 
+	 * @param hasValue : n/a : required : Checks if this "hasValue" is === to data value. This is type strict.
+	 * 
+	 * @reutrn hasValue : boolean : always : True of false if the value is their.
+	 */
 	Data.prototype.hasValue = function(value) {
 		if (!value)
 			return null;
@@ -315,6 +392,15 @@ var Chunk = undefined;
 		}
 	}
 
+	/**
+	 * Function: Set Value
+	 * Access: Public
+	 * Type: Method
+	 * For: Data
+	 * Description: Sets the value of the data variable.
+	 * 
+	 * @param value : n/a : required : The value to store in this data variable.
+	 */
 	Data.prototype.setValue = function(value) {
 		if (!value)
 			throw Error ('A value must be passed through to set it to data object ' + this.path);
@@ -330,8 +416,12 @@ var Chunk = undefined;
 	 * Function: Doc
 	 * Access: Public
 	 * Type: Constructor
-	 * For: This
-	 * Description: ...
+	 * For: Doc
+	 * Description: The documentation constructor to house all information elements.
+	 * 
+	 * @path path : string : required : The path reference to it's parent.
+	 * 
+	 * @return Doc : object : always : The documentation object.
 	 */
 	var Doc = function(path) {
 
@@ -342,6 +432,19 @@ var Chunk = undefined;
 			throw Error('The path to the parent is required');
 	}
 
+	/**
+	 * Function: Info
+	 * Access: Public
+	 * Type: Method
+	 * For: Data
+	 * Description: Adds information to the documentation object.
+	 * 
+	 * @param name : string : required : The name of the information to set or retrieve.
+	 * @param stringValue : string : optional : The optional value of the information.
+	 * 
+	 * @return info : string : sometimes : returns if the value is present.
+	 * @return null : null : sometimes : returns if the value is unable to be found.
+	 */
 	Doc.prototype.info = function(name, stringValue) {
 		
 		// Throw Errors for invalid use.
@@ -371,6 +474,10 @@ var Chunk = undefined;
 	 * Type: Method
 	 * For: None
 	 * Description: Converts a string path into an array by seperating each data point with a '/'. Ex: fee/foo/fum
+	 * 
+	 * @param path : string : required : The string path; follows the data tree pathing with "/" seperating each data variable.
+	 *
+	 * @return path : array : always : Converts the string path to an array path so it may be looped through.
 	 */
 	var pathToArray = function(path) {
 		
