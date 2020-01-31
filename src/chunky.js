@@ -103,7 +103,8 @@ var Chunk = undefined;
 			// Get data object from path.
 			if (value === undefined) {
 				data = data.getValue(directory);
-				return data;
+				if (pathArray.length - 1 == idx)
+					return data;
 			}
 			
 			// Set the value. If directory doesn't exist, create it.
