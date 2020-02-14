@@ -99,27 +99,40 @@ var Chunk = undefined;
 
 			// Get path directory.
 			var directory = pathArray[idx];
-
-			// Get data object from path.
-			if (value === undefined) {
+			
+			// If directory does exist, retrieve it.
+			if (data.hasValue(directory)) {
 				data = data.getValue(directory);
-				if (pathArray.length - 1 == idx)
-					return data;
+				
+				// Check if this is the latest data in the path.
+				if (pathArray.length - 1 == idx) {
+					
+					// If their is a value passed through. Attached the value to the data.
+					if (value) {
+						data.setValue(value);
+					}
+				}
 			}
 			
-			// Set the value. If directory doesn't exist, create it.
+			// If the directory does not exist, create it, and retrieve it.
 			else {
-				if (data.hasValue(directory)) {
-					data = data.getValue(directory);
-					if (pathArray.length - 1 == idx)
-						data.setValue(value);
-				}
+				
+				// Check if this is the last directory in the path. If not, create a data container.
+				if (pathArray.length - 1 != idx)
+					data = data.addChild(directory, 'container');
+				
+				// If the latest directory in the path, insert a value for it.
 				else {
-					if (pathArray.length - 1 != idx)
-						data = data.addChild(directory, 'container');
+					var data = data.addChild(directory, 'variable');
+			
+					// If no value is passed through. Insert value, 'undefined'.
+					if (value === undefined) {
+						data.setValue(undefined);
+					}
+
+					// If their is a value passed through. Attached the value to the data.
 					else {
-						var child = data.addChild(directory, 'variable');
-						child.setValue(value);
+						data.setValue(value);
 					}
 				}
 			}
@@ -403,7 +416,8 @@ var Chunk = undefined;
 	 * @param value : n/a : required : The value to store in this data variable.
 	 */
 	Data.prototype.setValue = function(value) {
-		if (!value)
+
+		if (!value && typeof value !== 'undefined')
 			throw Error ('A value must be passed through to set it to data object ' + this.path);
 
 		else if (this.type === 'variable')
