@@ -375,9 +375,29 @@ var Chunk = undefined;
 				return this.value[subValue];
 			else
 				return null;
-		}	
+		}
 		else
 			return this.value;
+	}
+	
+	/**
+	 * Function: Get Value If Undefined Return
+	 * Access: Public
+	 * Type: Method
+	 * For: Data
+	 * Description: Retrieves the value of the Data variable. If the value is undefined, return the value inside the parameter.
+	 */
+	Data.prototype.getValueIUR = function(iur_value) {
+		
+		// Get a value from this data element.
+		var value = this.getValue();
+		
+		// Check if it's undefined or null. If it is, return the iur_value. If not, return the data value.
+		if (value == undefined) {
+			return iur_value;
+		}
+		else
+			return value;
 	}
 	
 	/**
