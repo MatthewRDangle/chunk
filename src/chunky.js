@@ -92,6 +92,11 @@ var Chunk = undefined;
 
 		// Convert path into a path array.
 		var pathArray = pathToArray(path);
+		
+		// If "d" is the first path, remove it. This is because d is the start of the data tree.
+		if (pathArray[0] == 'd') {
+			pathArray.splice(0, 1);
+		}
 
 		// Loop through path array to find or create data objects.
 		var data = this.dataTree;
