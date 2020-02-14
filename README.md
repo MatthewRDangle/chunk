@@ -14,7 +14,7 @@ Chunky was built to support all modern browsers, from IE 11 onward, Chrome, Safa
 
 
 ## How does it work?
-A constructor object called Chunk is the gateway to writing modular and reusable JavaScript markup. Just write <code>var newChunk = new chunk("chunk name");</code> to create a new chunk. With <code> newChunk </code> you will write build instructions using the <code>instruct</code> function, <code>newChunk.instruct(func)</code>. When ready to render, use the ready function, <code>newChunk.ready()</code>, to retrieve compiled code. 
+A constructor object called Chunk is the gateway to writing modular and reusable JavaScript markup. Just write <code>var newChunk = new chunk("chunk name");</code> to create a new chunk. With <code>newChunk</code> you will write build instructions using the <code>instruct</code> function, <code>newChunk.instruct(func)</code>. When ready to render, use the ready function, <code>newChunk.ready()</code>, to retrieve compiled code. 
 
 
 ## How is chunky different?
@@ -41,9 +41,9 @@ If you have any issue using Chunky, or would like to provide feedback, post an i
 ## Versioning
 Chunky will be maintained under these versioning guidelines as much as possible. Releases will be numbered with the following format:
 
-`<major>.<minor>.<path>`
+`<major>.<minor>.<patch>`
 
 And constructed with the following guidelines:
-+ Breaking backwards compatibility bumps the major (and resets the minor and patch).
++ Breaking backwards compatibility bumps the major (resets the minor and patch).
 + New additions to functionality without breaking backward compatibility bumps the minor (and resets the patch).
 + Bug fixes and misc changes bumps the patch.
