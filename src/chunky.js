@@ -67,6 +67,44 @@ var Chunk = undefined;
 			return this.output;
 		}
 	}
+	
+	/**
+	 * Function: Detect Data
+	 * Access: Public.
+	 * Type; Method
+	 * For: Chunk
+	 * Description: Retrieve all applicable data objects.
+	 * 
+	 * @return: data : array : always : A list of all data found within the system.
+	 */
+	Chunk.prototype.detectData = function(returnType) {
+		
+		// Retrieve all top level data.
+		var detectedData = [];
+		var d = this.dataTree;
+		loopData(d); // Start loop at top level 'd' data.
+		return detectedData;
+		
+		/*
+		 * Title: Loop Data
+		 * Description: Retrieve all applicable data objects and store in "detectedData" array.
+		 */
+		function loopData(data) {
+			if (returnType === data.type || !returnType)
+				detectedData.push(data);
+			
+			// If the data is a container, retrieve the values inside the array, then loop again for each data.
+			if (data.type === 'container') {
+				// Retrieve all children Data.
+				for (var key in data.getValue()) {
+					
+					// Retrieve a child data & pass into loopData function.
+					var childData = data.getValue(key);
+					loopData(childData);
+				}
+			}
+		}
+	}
 
 	/**
 	 * Function: Data
