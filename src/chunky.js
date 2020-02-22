@@ -130,6 +130,11 @@ var Chunk = undefined;
 
 		// Convert path into a path array.
 		var pathArray = pathToArray(path);
+		
+		// If "d" is the first path, remove it. This is because d is the start of the data tree.
+		if (pathArray[0] == 'd') {
+			pathArray.splice(0, 1);
+		}
 
 		// Loop through path array to find or create data objects.
 		var data = this.dataTree;
@@ -137,26 +142,40 @@ var Chunk = undefined;
 
 			// Get path directory.
 			var directory = pathArray[idx];
-
-			// Get data object from path.
-			if (value === undefined) {
+			
+			// If directory does exist, retrieve it.
+			if (data.hasValue(directory)) {
 				data = data.getValue(directory);
-				return data;
+				
+				// Check if this is the latest data in the path.
+				if (pathArray.length - 1 == idx) {
+					
+					// If their is a value passed through. Attached the value to the data.
+					if (value) {
+						data.setValue(value);
+					}
+				}
 			}
 			
-			// Set the value. If directory doesn't exist, create it.
+			// If the directory does not exist, create it, and retrieve it.
 			else {
-				if (data.hasValue(directory)) {
-					data = data.getValue(directory);
-					if (pathArray.length - 1 == idx)
-						data.setValue(value);
-				}
+				
+				// Check if this is the last directory in the path. If not, create a data container.
+				if (pathArray.length - 1 != idx)
+					data = data.addChild(directory, 'container');
+				
+				// If the latest directory in the path, insert a value for it.
 				else {
-					if (pathArray.length - 1 != idx)
-						data = data.addChild(directory, 'container');
+					var data = data.addChild(directory, 'variable');
+			
+					// If no value is passed through. Insert value, 'undefined'.
+					if (value === undefined) {
+						data.setValue(undefined);
+					}
+
+					// If their is a value passed through. Attached the value to the data.
 					else {
-						var child = data.addChild(directory, 'variable');
-						child.setValue(value);
+						data.setValue(value);
 					}
 				}
 			}
@@ -399,9 +418,29 @@ var Chunk = undefined;
 				return this.value[subValue];
 			else
 				return null;
-		}	
+		}
 		else
 			return this.value;
+	}
+	
+	/**
+	 * Function: Get Value If Undefined Return
+	 * Access: Public
+	 * Type: Method
+	 * For: Data
+	 * Description: Retrieves the value of the Data variable. If the value is undefined, return the value inside the parameter.
+	 */
+	Data.prototype.getValueIUR = function(iur_value) {
+		
+		// Get a value from this data element.
+		var value = this.getValue();
+		
+		// Check if it's undefined or null. If it is, return the iur_value. If not, return the data value.
+		if (value == undefined) {
+			return iur_value;
+		}
+		else
+			return value;
 	}
 	
 	/**
@@ -440,7 +479,8 @@ var Chunk = undefined;
 	 * @param value : n/a : required : The value to store in this data variable.
 	 */
 	Data.prototype.setValue = function(value) {
-		if (!value)
+
+		if (!value && typeof value !== 'undefined')
 			throw Error ('A value must be passed through to set it to data object ' + this.path);
 
 		else if (this.type === 'variable')
