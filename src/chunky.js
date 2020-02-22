@@ -480,7 +480,7 @@ var Chunk = undefined;
 	 */
 	Data.prototype.setValue = function(value) {
 
-		if (!value && typeof value !== 'undefined')
+		if (value === null && typeof value !== 'undefined')
 			throw Error ('A value must be passed through to set it to data object ' + this.path);
 
 		else if (this.type === 'variable')
