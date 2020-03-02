@@ -347,6 +347,11 @@ var Chunk = undefined;
 		else
 			this.value = undefined;
 		
+		// Flags object.
+		this.flags = {
+			required: false; // Makes a value required before compiling.
+		}
+		
 		// Documentation Container.
 		this.doc = new Doc(path);
 	}
