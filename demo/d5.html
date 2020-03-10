@@ -93,7 +93,7 @@
 						for (var v in variables) {
 							var variable = variables[v];
 							var desc = variable.doc.info('desc');
-							content += '<div>' + variable.name + ': ' + desc + '</div>';
+							content += '<div> <strong>' + variable.name + '</strong>: ' + desc + '</div>';
 						}
 						return content;
 					})();
