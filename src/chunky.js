@@ -349,7 +349,7 @@ var Chunk = undefined;
 		
 		// Flags object.
 		this.flags = {
-			required: false; // Makes a value required before compiling.
+			required: false // Makes a value required before compiling.
 		}
 		
 		// Documentation Container.
