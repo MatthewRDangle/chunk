@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Accessibility & Readability -->
+	<meta charset="UTF-8">
+	<title> Create A Chunk | Chunky </title>
+	<script src="../src/chunky.js"></script>
+	
+	<style>
+		* {
+		  	-webkit-box-sizing: border-box;
+  			-moz-box-sizing: border-box;
+  			box-sizing: border-box;
+		}
+		.textarea {
+			display: inline-block;
+			width: 50%;
+			height: 500px;
+			padding: 1%;
+			margin: 0;
+			border: 1px solid black;
+			vertical-align: top;
+		}
+		.jsPreview {
+			display: inline-block;
+			width: 50%;
+			height: 500px;
+			padding: 1%;
+			margin: 0;
+			border: 0;
+			vertical-align: top;
+		}
+		.previewWindow {
+			width: 100%;
+		}
+		.chunkName {
+			display: block;
+		}
+		.chunkName input {
+			width: 200px;
+			max-width: 100%;
+		}
+	</style>
+</head>
+
+<body id='root'>
+	<h1> Chunky. </h1>
+	<hr>
+	<p> Create a simple chunk with code inside. </p>
+	<hr>
+	<p> Write some HTML inside the textarea. The HTML must be valid. A preview of the chunky code will appear next to it and it will be rendered below. </p>
+	
+	<label class="chunkName">
+		<strong> Chunk Name: </strong>
+		<input id="chunkName" type="text" value="Test"/>
+	</label>
+	<div role="presentations" style="height: 20px;"></div>
+	<textarea id="textarea" class="textarea"></textarea><!--
+	--><div id="jsPreview" class="jsPreview">
+		Javascript will appear here.
+	</div>
+	<div role="presentations" style="height: 20px;"></div>
+	<div id="previewWindow" class="previewWindow">
+		A rendered preview will appear here.
+	</div>
+	
+	<script>
+		/* Get Elements */
+		var chunkName = document.getElementById("chunkName");
+		var textarea = document.getElementById("textarea");
+		var jsPreview = document.getElementById("jsPreview");
+		var previewWindow = document.getElementById("previewWindow");
+		
+		/* Update Previews. */
+		chunkName.addEventListener('change', function nameChange() { conRen(); })
+		textarea.addEventListener('change', function htmlChange() { conRen(); })
+		
+		
+		/* Convert & Render */
+		var elementCounter = 0; // Set Element Counter for Documentation Display.
+		var conRen = function() {
+
+			// Convert to Chunky.
+			console.log('Converting to Chunky Code for Javascript View.');
+			var name = chunkName.value; // Get Chunk Name.
+			
+			// Get HTML, validate it and convert it.
+			var html = textarea.value;
+
+			// Convert.
+			var jsCode = '';
+			if (html) {
+				// Create Dummy Element to sort through.
+				var dummy = document.createElement('div');
+				dummy.innerHTML = html;
+				var obj = HTMLtoNode(dummy, false);
+				elementCounter = 0; // Reset Counter.
+				
+				// Add to JSCode for documentation.
+				jsCode = obj.docs;
+			}
+			else {
+				jsCode = '';
+			}
+			
+			// Insert into Preview.
+			jsPreview.innerHTML = 'var newChunk = Chunk(' + name + '); <br/> newChunk.instruct = function() { <br/>' + jsCode + '}';
+			
+			// Render Chunk.
+			console.log('Rendering the Chunk.');
+			var convert = function() {
+				var newChunk = Chunk(name);
+				newChunk.instruct = function() {
+					// Insert Build Instructions Here.
+					return HTML;
+				}
+			}
+		};
+		
+		/* 
+		** Function: HTMLtoNode
+		** Description: Convert HTML String to JS Nodes & document process.
+		*/
+		function HTMLtoNode(node, documentThisNode, appendChild) {
+			var conv = ''; // Conversion render.
+			var docs = ''; // Documentation String.
+			var tab = '&nbsp; &nbsp; &nbsp; &nbsp;'; // Spacing for Documenation info.
+			var brk = '<br/>'; // Spacing for Documenation info.
+			
+			// Element Number for variable creation.
+			var varName = '';
+			if (documentThisNode) {
+				elementCounter++;
+				varName = 'e' + elementCounter;
+			}
+			
+			// Figure out what the node is.
+			if (node.nodeName == '#text') {
+				var text = node.textContent.replace(/\W/g, ''); // Remove all spaces, tabs, and new lines.
+				if (text.length) {
+					var newTxt = document.createTextNode(text);
+					if (documentThisNode)
+						docs += tab + varName + ' = document.createTextNode(' + text + ');' + brk;	
+				}
+			}
+			else if (node.nodeName == '#comment') {
+				var newCmt = document.createComment(node.textContent);
+				if (documentThisNode)
+					docs += tab + varName + ' = document.createComment(' + node.textContent + ');' + brk;
+			}
+			else {
+				debugger;
+				var newEl = document.createElement(node.nodeName);
+				if (documentThisNode) {
+					docs += tab + varName + ' = document.createElement(' + node.nodeName.toLowerCase() + ');' + brk;	
+				}
+					
+				// If the element has a child, convert it.
+				if (node.childElementCount) {
+					for (var idc = 0; idc < node.childElementCount; idc++) {
+						var obj = HTMLtoNode(node.children[idc], true, documentThisNode);
+						docs += obj.docs;
+						
+						// Append Child if requested.
+						if (appendChild)
+							docs += tab + varName + '.appendChild(' + obj.varName + ');' + brk;
+					}
+				}
+			}
+			
+			// Return conversion and documentation.
+			return {varName: varName, conv: conv, docs: docs};
+		}
+	</script>
+</body>
+</html>
