@@ -29,6 +29,7 @@
 			margin: 0;
 			border: 0;
 			vertical-align: top;
+			font-family: monospace;
 		}
 		.previewWindow {
 			width: 100%;
@@ -60,16 +61,12 @@
 		Javascript will appear here.
 	</div>
 	<div role="presentations" style="height: 20px;"></div>
-	<div id="previewWindow" class="previewWindow">
-		A rendered preview will appear here.
-	</div>
 	
 	<script>
 		/* Get Elements */
 		var chunkName = document.getElementById("chunkName");
 		var textarea = document.getElementById("textarea");
 		var jsPreview = document.getElementById("jsPreview");
-		var previewWindow = document.getElementById("previewWindow");
 		
 		/* Update Previews. */
 		chunkName.addEventListener('change', function nameChange() { conRen(); })
@@ -89,22 +86,28 @@
 
 			// Convert.
 			var jsCode = '';
-			if (html) {
-				// Create Dummy Element to sort through.
-				var dummy = document.createElement('div');
-				dummy.innerHTML = html;
-				var obj = HTMLtoNode(dummy, false);
-				elementCounter = 0; // Reset Counter.
-				
-				// Add to JSCode for documentation.
-				jsCode = obj.docs;
+			if (name.length == 0) {
+				jsCode = "Error: A chunk must have a name."
+				jsPreview.innerHTML = jsCode;
 			}
 			else {
-				jsCode = '';
+				if (html) {
+					// Create Dummy Element to sort through.
+					var dummy = document.createElement('div');
+					dummy.innerHTML = html;
+					var obj = HTMLtoNode(dummy, false, false, true);
+					elementCounter = 0; // Reset Counter.
+					
+					// Add to JSCode for documentation.
+					jsCode = obj.docs;
+				}
+				else {
+					jsCode = '';
+				}
+				
+				// Insert into Preview.
+				jsPreview.innerHTML = '/* Create a new modular UI Component: AKA Chunk. */ <br/> var newChunk = Chunk(' + name + '); <br/> <br/> // Write render instructions. <br/> newChunk.instruct = function(chunk) { <br/>' + jsCode + '} <br/> newChunk.ready(); // Execute the instructions for publishing.'; 
 			}
-			
-			// Insert into Preview.
-			jsPreview.innerHTML = 'var newChunk = Chunk(' + name + '); <br/> newChunk.instruct = function() { <br/>' + jsCode + '}';
 			
 			// Render Chunk.
 			console.log('Rendering the Chunk.');
@@ -121,55 +124,94 @@
 		** Function: HTMLtoNode
 		** Description: Convert HTML String to JS Nodes & document process.
 		*/
-		function HTMLtoNode(node, documentThisNode, appendChild) {
+		function HTMLtoNode(node, documentThisNode, appendChild, returnChildren) {
 			var conv = ''; // Conversion render.
 			var docs = ''; // Documentation String.
 			var tab = '&nbsp; &nbsp; &nbsp; &nbsp;'; // Spacing for Documenation info.
 			var brk = '<br/>'; // Spacing for Documenation info.
+			var orgApdChild = (appendChild) ? true : false;
 			
 			// Element Number for variable creation.
 			var varName = '';
-			if (documentThisNode) {
-				elementCounter++;
-				varName = 'e' + elementCounter;
-			}
 			
 			// Figure out what the node is.
 			if (node.nodeName == '#text') {
 				var text = node.textContent.replace(/\W/g, ''); // Remove all spaces, tabs, and new lines.
-				if (text.length) {
+				if (text.length > 0) {
+					appendChild = true;
 					var newTxt = document.createTextNode(text);
-					if (documentThisNode)
-						docs += tab + varName + ' = document.createTextNode(' + text + ');' + brk;	
+					if (documentThisNode) {
+						elementCounter++;
+						varName = 'e' + elementCounter;
+						docs += tab + varName + ' = document.createTextNode(&ldquo;' + text + '&rdquo;);' + brk;
+					}
 				}
+				else
+					appendChild = false;
 			}
 			else if (node.nodeName == '#comment') {
 				var newCmt = document.createComment(node.textContent);
-				if (documentThisNode)
-					docs += tab + varName + ' = document.createComment(' + node.textContent + ');' + brk;
+				if (documentThisNode && newCmt.length > 0) {
+					elementCounter++;
+					varName = 'e' + elementCounter;
+					docs += tab + varName + ' = document.createComment(&ldquo;' + node.textContent + '&rdquo;);' + brk;
+					appendChild = true;
+				}
+				else
+					appendChild = false;
 			}
 			else {
-				debugger;
 				var newEl = document.createElement(node.nodeName);
 				if (documentThisNode) {
-					docs += tab + varName + ' = document.createElement(' + node.nodeName.toLowerCase() + ');' + brk;	
-				}
+					elementCounter++;
+					varName = 'e' + elementCounter;
+					docs += tab + varName + ' = document.createElement(&ldquo;' + node.nodeName.toLowerCase() + '&rdquo;);' + brk;
 					
-				// If the element has a child, convert it.
-				if (node.childElementCount) {
-					for (var idc = 0; idc < node.childElementCount; idc++) {
-						var obj = HTMLtoNode(node.children[idc], true, documentThisNode);
-						docs += obj.docs;
-						
-						// Append Child if requested.
-						if (appendChild)
-							docs += tab + varName + '.appendChild(' + obj.varName + ');' + brk;
+					// Attach node attributes.
+					if (node.attributes.length > 0) {
+						for (var n = 0; n < node.attributes.length; n++) {
+							var attrName = node.attributes[n].name; // Get Attribute Type.
+							var attrValue = node.getAttribute(attrName); // Get Value.
+							docs += tab + varName + '.setAttribute(&ldquo;' + attrName + '&rdquo;, &ldquo;' + attrValue + '&rdquo;);' + brk;
+						}
 					}
+				}
+
+				// If the element has a child, convert it.
+				var returnStatement = '';
+				if (node.childNodes.length) {
+					var firstReturnChild = true;
+					for (var idc = 0; idc < node.childNodes.length; idc++) {
+						var obj = HTMLtoNode(node.childNodes[idc], true, true, false);
+						docs += obj.docs;
+
+						// Append Child if requested.
+						if (obj.appendChild && orgApdChild) {
+							docs += tab + varName + '.appendChild(' + obj.varName + ');' + brk;	
+						}
+							
+						// If return children, push them into a string to be returned.
+						if (returnChildren && obj.appendChild) {
+							if (firstReturnChild) {
+								returnStatement += obj.varName;	
+								firstReturnChild = false;
+							}
+							else {
+								returnStatement += ' + ' + obj.varName;
+							} 
+						}
+					}
+				}
+				
+				// Return Children if suppose too.
+				if (returnChildren) {
+					docs += brk + tab + '/* Return Children for Rendering. */';
+					docs += brk + tab + 'return ' + returnStatement + ';' + brk;	
 				}
 			}
 			
 			// Return conversion and documentation.
-			return {varName: varName, conv: conv, docs: docs};
+			return {varName: varName, conv: conv, docs: docs, appendChild: appendChild};
 		}
 	</script>
 </body>
