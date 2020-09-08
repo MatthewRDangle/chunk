@@ -53,7 +53,7 @@
 	
 	<label class="chunkName">
 		<strong> Chunk Name: </strong>
-		<input id="chunkName" type="text" value="Test"/>
+		<input id="chunkName" type="text" value="test"/>
 	</label>
 	<div role="presentations" style="height: 20px;"></div>
 	<textarea id="textarea" class="textarea"></textarea><!--
@@ -106,7 +106,7 @@
 				}
 				
 				// Insert into Preview.
-				jsPreview.innerHTML = '/* Create a new modular UI Component: AKA Chunk. */ <br/> var newChunk = Chunk(' + name + '); <br/> <br/> // Write render instructions. <br/> newChunk.instruct = function(chunk) { <br/>' + jsCode + '} <br/> newChunk.ready(); // Execute the instructions for publishing.'; 
+				jsPreview.innerHTML = '// Create a new UI Component; aka Chunk. <br/> var newChunk = new Chunk("' + name + '"); <br/> newChunk.instruct(function(chunk) { <br/>' + jsCode + '}) <br/> return newChunk; // Return Chunk object for demo to work.'; 
 			}
 			
 			// Render Chunk.
@@ -143,7 +143,7 @@
 					if (documentThisNode) {
 						elementCounter++;
 						varName = 'e' + elementCounter;
-						docs += tab + varName + ' = document.createTextNode(&ldquo;' + text + '&rdquo;);' + brk;
+						docs += tab + 'var ' + varName + ' = document.createTextNode("' + text + '");' + brk;
 					}
 				}
 				else
@@ -154,7 +154,7 @@
 				if (documentThisNode && newCmt.length > 0) {
 					elementCounter++;
 					varName = 'e' + elementCounter;
-					docs += tab + varName + ' = document.createComment(&ldquo;' + node.textContent + '&rdquo;);' + brk;
+					docs += tab + 'var ' + varName + ' = document.createComment("' + node.textContent + '";);' + brk;
 					appendChild = true;
 				}
 				else
@@ -165,14 +165,14 @@
 				if (documentThisNode) {
 					elementCounter++;
 					varName = 'e' + elementCounter;
-					docs += tab + varName + ' = document.createElement(&ldquo;' + node.nodeName.toLowerCase() + '&rdquo;);' + brk;
+					docs += tab + 'var ' + varName + ' = document.createElement("' + node.nodeName.toLowerCase() + '");' + brk;
 					
 					// Attach node attributes.
 					if (node.attributes.length > 0) {
 						for (var n = 0; n < node.attributes.length; n++) {
 							var attrName = node.attributes[n].name; // Get Attribute Type.
 							var attrValue = node.getAttribute(attrName); // Get Value.
-							docs += tab + varName + '.setAttribute(&ldquo;' + attrName + '&rdquo;, &ldquo;' + attrValue + '&rdquo;);' + brk;
+							docs += tab + varName + '.setAttribute("' + attrName + '", "' + attrValue + '");' + brk;
 						}
 					}
 				}

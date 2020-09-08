@@ -153,6 +153,8 @@ var Chunk = undefined;
 					// If their is a value passed through. Attached the value to the data.
 					if (value) {
 						data.setValue(value);
+						
+						this.compiled = false; // Reset Compiled Flag.
 					}
 				}
 			}
@@ -176,6 +178,8 @@ var Chunk = undefined;
 					// If their is a value passed through. Attached the value to the data.
 					else {
 						data.setValue(value);
+						
+						this.compiled = false; // Reset Compiled Flag.
 					}
 				}
 			}
@@ -227,6 +231,9 @@ var Chunk = undefined;
 
 		// Push blueprints into the chunk.
 		this.blueprints = blueprints;
+		
+		// Reset Compiled Flag.
+		this.compiled = false;
 	}
 
 	/**
