@@ -75,6 +75,7 @@ var Chunk = undefined;
 	 * For: Chunk
 	 * Description: Retrieve all applicable data objects.
 	 * 
+	 * @param: ???
 	 * @return: data : array : always : A list of all data found within the system.
 	 */
 	Chunk.prototype.detectData = function(returnType) {
