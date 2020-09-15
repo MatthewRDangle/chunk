@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Accessibility & Readability -->
+	<meta charset="UTF-8">
+	<title> Auto Documentation | Chunky </title>
+	<script src="../src/chunky.js"></script>
+	
+	<style>
+		* {
+		  	-webkit-box-sizing: border-box;
+  			-moz-box-sizing: border-box;
+  			box-sizing: border-box;
+		}
+		.textarea {
+			display: inline-block;
+			width: 100%;
+			height: 250px;
+			padding: 1%;
+			margin: 0;
+			border: 1px solid black;
+			vertical-align: top;
+		}
+		.autoDocPreview {
+			display: inline-block;
+			width: 100%;
+			margin-top: 15px;
+			vertical-align: top;
+		}
+		.autoDocPreview label {
+			display: block;
+			width: 100%;
+			border-bottom: 1px solid black;
+		}
+		.autoDocPreview {
+			margin-right: 0.5%;
+		}
+		.objectRef {
+			padding: 5px 0;
+			border-bottom: 1px solid black;
+		}
+		.property {
+			display: inline-block;
+			width: 100px;
+			vertical-align: top;
+		}
+		.value {
+			display: inline-block;
+			width: calc(100% - 100px);
+			vertical-align: top;
+		}
+		.error {
+			color: red;
+		}
+	</style>
+</head>
+
+<body id='root'>
+	<h1> Chunky. </h1>
+	<hr>
+	<p> Write inline documentation with a Chunk and store it for later access. </p>
+	<hr>
+	<p> All data can be easily grabbed at once and stored into an array using <strong>.detectData(Type)</strong>. The "Type" parameter is optional. If used it must be either "container" or "variable". Container will return all data containers, variables returns all data variables, and non returns all data. </p>
+	<label for="textarea">JavaScript</label>
+	<textarea id="textarea" class="textarea">// Create a new UI Component; aka Chunk.&#13;var newChunk = new Chunk("test");&#13;newChunk.doc.info("desc", "Test chunk for demo purposes.");&#13;newChunk.instruct(function(chunk) {&#13;&#13;    // Write Vanilla JS Here. &#13;    chunk.data('test', 'Hello World'); // Create new data and set value to 'Hello World'. &#13;    chunk.data('test').doc.info('desc', 'This gets rendered on to screen.'); &#13;    chunk.data('test').doc.info('something', 'Something else can go here.');&#13;&#13;    return chunk.data('test').getValue();// Return something here for it to be rendered. &#13;});&#13;return newChunk; // Return Chunk object for demo to work.</textarea>
+	<div class="autoDocPreview">
+		<label>Auto Docs Preview</label>
+		<div id="autoDocPreview"></div>
+	</div>
+	<script>
+		// Get Elements from Document.
+		var textarea = document.getElementById("textarea");
+		var autoDocPreview = document.getElementById("autoDocPreview");
+		
+		textarea.onchange = function() { 
+			try {
+				update();
+			}
+			catch (err) {
+				autoDocPreview.innerHTML = '<span class="error">' + err.message + '</span>';
+			}
+		};
+		
+		update(); // Run Initially.
+		
+		
+		/*
+		 * Name: printHTML.
+		 * Description: Takes a string and escapes all HTML related characters so the full string legible and not confused for HTML syntax.
+		 */
+		function update() {
+
+			// Extract Textarea JavaScript.
+			var func = new Function(textarea.value);
+			var newChunk = func(); // Retrieve new chunk object.
+
+			// Display Object properties.
+			var printProperties = '';
+
+			if (newChunk.hasOwnProperty("blueprints")) {
+				newChunk.ready(); // Ensure the Chunk runs it's most recent code and is compiled.
+				
+				 // Grab all chunk data variables and print variables.
+				var dataVars = newChunk.detectData('variable');
+				for (var dv = 0; dv < dataVars.length; dv++) {
+					
+					// Get all data found in the Chunk.
+					var data = dataVars[dv];
+					printProperties += '<strong>Name: ' + data.name + ' Path: ' + data.path + ' <br/></strong>';
+					for (var dc in data.doc) {
+						if (dc == 'for' || dc == 'info' || dc == 'length')
+							continue;
+						
+						printProperties += '<span style="display: inline-block; width: 10px;"></span>' + dc + ': ' + data.doc.info(dc) + '<br/>';
+					}
+					printProperties += ' <br/>';
+				}
+			}
+			
+			// Render the printed properties onto the screen.
+			autoDocPreview.innerHTML = printProperties;
+		}
+
+		
+		/*
+		 * Name: printHTML.
+		 * Description: Takes a string and escapes all HTML related characters so the full string legible and not confused for HTML syntax.
+		 * Compatibility: ???
+		 * 
+		 * @para string [string] - A string to be parsed.
+		 * @return string [string] - Returns a string with all HTML related characters escaped.
+		 */
+		function printHTML(string) {
+			
+			/* Return legible HTML. */
+			return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+		}
+	</script>
+</body>
+</html>
