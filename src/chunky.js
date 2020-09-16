@@ -57,7 +57,13 @@ var Chunk = undefined;
 		}
 
 		// Return compiled data from blueprints function.
-		var output = this.blueprints(this);
+		var output = undefined;
+		
+		// Attempt to compile.
+		try { output = this.blueprints(this); }
+		catch (error) { throw Error(error); }
+		
+		// If the output was returned, store it under output.
 		if (!output) {
 			throw Error ('No data was returned from chunk ' + this.name + ' blueprints function. Please add a return statement to return all data to be rendered.');
 		}
@@ -186,8 +192,7 @@ var Chunk = undefined;
 			}
 		}
 
-		if (value === undefined)
-			return data;
+		return data;
 	}
 
 	/**
@@ -357,7 +362,8 @@ var Chunk = undefined;
 		
 		// Flags object.
 		this.flags = {
-			required: false // Makes a value required before compiling.
+			required: false, // Makes a value required before compiling.
+			typeLock: false // Forces the value type to match.
 		}
 		
 		// Documentation Container.
@@ -481,6 +487,23 @@ var Chunk = undefined;
 				return false;
 		}
 	}
+	
+	/**
+	 * Function: Required
+	 * Access: Public
+	 * Type: Method
+	 * For: Data
+	 * Description: Sets this data as required. The compiler will not finish compiling.
+	 */
+	Data.prototype.required = function() {
+		this.flags.required = true; // Set the required flag to true.
+		
+		// Enforce by throwing error if value is not found.
+		if (typeof this.value === 'undefined' || this.value === null)
+			throw Error (this.name + ' data ' + this.type + ' must have a value. Path = ' + this.path);
+		
+		return this; // Return the Chunk so the user may chain flags.
+	}
 
 	/**
 	 * Function: Set Value
@@ -488,8 +511,6 @@ var Chunk = undefined;
 	 * Type: Method
 	 * For: Data
 	 * Description: Sets the value of the data variable.
-	 * 
-	 * @param value : n/a : required : The value to store in this data variable.
 	 */
 	Data.prototype.setValue = function(value) {
 
@@ -501,6 +522,28 @@ var Chunk = undefined;
 		
 		else
 			throw Error ("Can't set the value of a container data object for " + this.path);
+	}
+	
+	/**
+	 * Function: Type Lock
+	 * Access: Public
+	 * Type: Method
+	 * For: Data
+	 * Description: Restricts the value to be a particular type. (IE typeof).
+	 * 
+	 * @param type_of : string : required : The typeof value to check.
+	 */
+	Data.prototype.typeLock = function(type_of) {
+		
+		// If type_of exists, lock it.
+		if (type_of && typeof type_of === 'string')
+			this.flags.typeLock = type_of;
+		
+		// Compare and error if it doesn't work.
+		if (typeof this.value !== type_of)
+			throw Error ('The value of data ' + this.type + ' ' + this.name + ' does not match the typeLock value ' + this.flags.typeLock + '. Path = ' + this.path)
+	
+		return this; // Return the Chunk so the user may chain flags.
 	}
 
 	/**
