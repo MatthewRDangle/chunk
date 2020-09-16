@@ -202,13 +202,17 @@ var Chunk = undefined;
 	 * For: Chunk
 	 * Description: Retrieve the data object.
 	 * 
-	 * @param: name : string : required : A name for this chunk.
+	 * @param: name : string : optional : A name for this chunk.
 	 * 
 	 * @return: chunk : object : always : A duplicate chunk object, unique without reference.
 	 */
 	Chunk.prototype.duplicate = function(name) {
 		
-		//Create a New Chunk
+		// If name doesn't exist, use existing.
+		if (!name)
+			name = this.name;
+		
+		// Create a New Chunk
 		var duplicate_chunk = new Chunk(name, {
 			type: this.type,
 			prefix: this.prefix
