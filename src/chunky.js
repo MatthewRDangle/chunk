@@ -498,6 +498,8 @@ var Chunk = undefined;
 	 * Type: Method
 	 * For: Data
 	 * Description: Sets this data as required. The compiler will not finish compiling.
+	 *
+	 * [Prototype] 
 	 */
 	Data.prototype.required = function() {
 		this.flags.required = true; // Set the required flag to true.
@@ -536,6 +538,8 @@ var Chunk = undefined;
 	 * Description: Restricts the value to be a particular type. (IE typeof).
 	 * 
 	 * @param type_of : string : required : The typeof value to check.
+	 * 
+	 * [Prototype]
 	 */
 	Data.prototype.typeLock = function(type_of) {
 		
