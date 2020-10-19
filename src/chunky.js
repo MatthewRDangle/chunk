@@ -81,7 +81,8 @@ var Chunk = undefined;
 	 * For: Chunk
 	 * Description: Retrieve all applicable data objects.
 	 * 
-	 * @param: ???
+	 * @param: returnType : string : optional : Can be "variable" or "container". This will return the correct type of data. Leave absent to return everything.
+	 * 
 	 * @return: data : array : always : A list of all data found within the system.
 	 */
 	Chunk.prototype.detectData = function(returnType) {
@@ -452,6 +453,11 @@ var Chunk = undefined;
 	 * Type: Method
 	 * For: Data
 	 * Description: Retrieves the value of the Data variable. If the value is undefined, return the value inside the parameter.
+	 *
+	 * @param iur_value : n/a : optional : The value to return if the data value is "undefined".
+	 * 
+	 * @return value : n/a : sometimes : The value retrieve via getValue, if getValue is undefined, returns the iur_value.
+	 * @return iur_value : n/a : sometimes : If getValue is undefined, returns the iur_value.
 	 */
 	Data.prototype.getValueIUR = function(iur_value) {
 		
@@ -473,9 +479,9 @@ var Chunk = undefined;
 	 * For: Data
 	 * Description: Retrieves the value of the Data variable.
 	 * 
-	 * @param hasValue : n/a : required : Checks if this "hasValue" is === to data value. This is type strict.
+	 * @param value : n/a : required : Checks if this "value" is === to the data value. This is type strict.
 	 * 
-	 * @reutrn hasValue : boolean : always : True of false if the value is their.
+	 * @return hasValue : boolean : always : True of false if the value is there.
 	 */
 	Data.prototype.hasValue = function(value) {
 		if (!value)
@@ -517,6 +523,8 @@ var Chunk = undefined;
 	 * Type: Method
 	 * For: Data
 	 * Description: Sets the value of the data variable.
+	 *
+	 * @param value : n/a : required : The value to apply to this data object.
 	 */
 	Data.prototype.setValue = function(value) {
 
