@@ -477,11 +477,11 @@ var Chunk = undefined;
 	 * Access: Public
 	 * Type: Method
 	 * For: Data
-	 * Description: Retrieves the value of the Data variable.
+	 * Description: Checks if the value is associated with this Data object.
 	 * 
 	 * @param value : n/a : required : Checks if this "value" is === to the data value. This is type strict.
 	 * 
-	 * @return hasValue : boolean : always : True of false if the value is there.
+	 * @return hasValue : boolean : always : True or false if the value is there.
 	 */
 	Data.prototype.hasValue = function(value) {
 		if (!value)
