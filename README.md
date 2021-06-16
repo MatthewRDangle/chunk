@@ -1,4 +1,4 @@
-# Chunky ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# Chunky [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 * [What is Chunky?](#what-is-chunky)
 * [How does it work?](#how-does-it-work)
 * [How is Chunky different?](#how-is-chunky-different)
